@@ -53,23 +53,3 @@ else
     action :delete
   end
 end
-
-package 'docker-engine' do
-  action :install
-end
-
-group 'docker' do
-  action :modify
-  members 'srb55'
-  append true
-end
-
-service 'docker' do
-  action :start
-end
-
-docker_registry 'https://dtr.cucloud.net/' do
-  username node['dtr']['user']
-  password node['dtr']['password']
-  email ''
-end
