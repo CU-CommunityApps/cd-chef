@@ -1,0 +1,8 @@
+name 'cd-tags'
+maintainer 'Shawn Bower'
+maintainer_email 'shawn.bower@gmail.com'
+license 'all_rights'
+description 'Installs/Configures cd-tags'
+long_description 'Installs/Configures cd-tags'
+version '0.1.0'
+depends 'aws'
