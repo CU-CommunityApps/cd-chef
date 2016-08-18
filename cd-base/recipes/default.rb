@@ -63,5 +63,5 @@ template 'pt.conf' do
 end
 
 service 'rsyslog' do
-  action :start
+  action :restart
 end
