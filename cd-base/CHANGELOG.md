@@ -1,11 +1,11 @@
-cs-base CHANGELOG
+cd-base CHANGELOG
 =================
 
-This file is used to list changes made in each version of the cs-base cookbook.
+This file is used to list changes made in each version of the cd-base cookbook.
 
 0.1.0
 -----
-- [your_name] - Initial release of cs-base
+- [your_name] - Initial release of cd-base
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
