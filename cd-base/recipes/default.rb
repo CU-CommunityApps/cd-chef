@@ -53,3 +53,15 @@ else
     action :delete
   end
 end
+
+template 'pt.conf' do
+    path '/etc/rsyslog.d/'
+    source 'pt.conf.erb'
+    owner 'root'
+    group 'root'
+    mode 0644
+end
+
+service 'rsyslog' do
+  action :start
+end
