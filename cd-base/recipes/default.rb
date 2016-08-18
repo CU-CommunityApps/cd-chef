@@ -55,7 +55,7 @@ else
 end
 
 template 'pt.conf' do
-    path '/etc/rsyslog.d/'
+    path '/etc/rsyslog.d/pt.conf'
     source 'pt.conf.erb'
     owner 'root'
     group 'root'
