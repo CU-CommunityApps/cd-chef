@@ -28,11 +28,7 @@ execute "Install the Amazon ECS agent" do
            "-p 127.0.0.1:51678:51678",
            "--env-file /etc/ecs/ecs.config",
            "amazon/amazon-ecs-agent:latest"].join(" ")
-
-  only_if do
-    ::File.exist?("/usr/bin/docker") && !OpsWorks::ShellOut.shellout("docker ps -a").include?("amazon-ecs-agent")
-  end
-
+           
   retries 1
   retry_delay 5
 end
