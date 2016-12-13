@@ -1,0 +1,144 @@
+# Contents of this configuration file are controlled by OpsWorks/Chef
+[sssd]
+config_file_version = 2
+domains = CORNELL.EDU
+services = nss, pam
+
+#pam_verbosity = 3
+
+
+[nss]
+filter_users = root, support
+filter_groups = root, support
+debug_level = 0
+memcache_timeout = 14400
+
+
+
+#
+# Define a domain for CU AD. This configures identity sourcing via LDAP.
+#
+[domain/CORNELL.EDU]
+auth_provider = krb5
+
+# Pretend that everybody has a gid. This may avoid the issue where the user is not "linux-enabled" (edsvaOIT-IsUnuxEnabled) and doesn't have a gid.
+ldap_user_gid_number = uidNumber
+
+# Ignore what ldap_user_gid_number returns for group id.
+override_gid = <%= @sssd_config['override_gid'] %>
+
+# Cornell users/groups start above 1024.
+min_id = 1024
+
+# Don't look up everyone.
+enumerate = false
+
+#
+# Use LDAP for identities.
+id_provider = ldap
+
+#
+# Define the Kerberos realm.
+#
+krb5_realm = CORNELL.EDU
+
+#
+# Define the Kerberos servers (AD servers).
+#
+# krb5_server = ad9.cornell.edu, ad10.cornell.edu
+# krb5_server = ad19.cornell.edu, ad20.cornell.edu
+krb5_server = <%= @sssd_config['krb5_server'].join(", ") %>
+
+
+#
+# Define the authentication parameters.
+#
+#ldap_default_bind_dn = CN=en-sssd,OU=HoldingIDs,OU=IDs,OU=EN,OU=DelegatedObjects,DC=cornell,DC=edu
+#ldap_default_bind_dn = CN=cit-pea1-hid,OU=cloud-devops,OU=Cloudification,OU=HoldingIDs,OU=IDs,OU=CIT-ENT,OU=DelegatedObjects,DC=cornell,DC=edu
+ldap_default_bind_dn = <%= @sssd_config['ldap_default_bind_dn'] %>
+
+ldap_default_authtok_type = password
+ldap_default_authtok = <%= @sssd_config['ldap_default_authtok_unencrypted'] %>
+
+ldap_force_upper_case_realm = true
+
+#
+# Do not look up group members for large groups.
+#
+ldap_disable_range_retrieval = true
+
+#
+# CU AD uses the "group" objectClass instead of the "posixGroup" objectClass,
+# so we tell LDAP to look for that objectClass instead of the standard.
+#
+ldap_group_object_class = group
+
+#
+# Secure the id_provider channel (user and group lookups). This isn't strictly
+# necessary, especially since Cornall essentially advertises all the NetIDs
+# anyway, but it is more secure...
+#
+ldap_id_use_start_tls = true
+
+#
+# Disable LDAP referrals. This has a significant performance impact
+# when enabled with an AD provider.
+#
+ldap_referrals = false
+
+#
+# Change the default LDAP schema from rfc2307 to rc2307bis, which is what AD
+# attempts to use. This alters the default value of a number of attributes to
+# be more in line with what AD presents.
+#
+ldap_schema = rfc2307bis
+
+#
+# Define the scope of LDAP searches. Everything else inherits this by default.
+#
+ldap_search_base = DC=cornell,DC=edu
+
+#
+# Enforce TLS/SSL security by requiring a valid certificate.
+#
+ldap_tls_reqcert = allow
+
+#
+# Define the LDAP server to connect to. We use ldaps here to use SSL security.
+#
+# Will need to change to AD9, AD10
+# ldap_uri = ldaps://ad19.cornell.edu
+ldap_uri = <%= @sssd_config['ldap_uri'] %>
+# ldap_backup_uri = ldaps://ad20.cornell.edu
+ldap_backup_uri = <%= @sssd_config['ldap_backup_uri'] %>
+
+#
+# Define the attribute that contains the user's real, human name.
+#
+ldap_user_fullname = displayName
+
+#
+# Define the attribute that contains the user's real, human name.
+#
+ldap_user_gecos = displayName
+
+#
+# The default is "homeDirectory", but CU AD is using unixHomeDirectory.
+#
+ldap_user_home_directory = unixHomeDirectory
+
+#
+# Define the attribute whence a user's account name cometh. By default, this
+# is "uid". While this is supported by CU AD (currently, in testing), that
+# attribute provides a seemingly filtered representation that is forced to be
+# lower case. Unfortunately, there is no complementary lower case version of
+# the group name. Therefore, we use the case-sensitive user name instead in
+# order to provide consistency.
+#
+ldap_user_name = cn
+
+#
+# CU AD uses the "user" objectClass instead of the "posixAccount" objectClass,
+# so we tell LDAP to look for that objectClass instead of the standard.
+#
+ldap_user_object_class = user

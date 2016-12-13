@@ -1,0 +1,12 @@
+[duo]
+; Contents of this configuration file are controlled by OpsWorks/Chef
+; Duo integration key
+ikey = <%= @duo_config['integration_key'] %>
+; Duo secret key
+skey = <%= @duo_config['secret_key_unencrypted'] %>
+; Duo API host
+host = <%= @duo_config['api_host'] %>
+; Send command for Duo Push authentication
+;pushinfo = yes
+; On service or configuration errors that prevent Duo authentication, fail "safe" (allow access) or "secure" (deny access). The default is "safe".
+failmode = secure
