@@ -7,7 +7,7 @@
 #
 
 begin
-  require 'chef/constants'
+  require 'chef/provider/noop'
 rescue LoadError; end
 
 require 'chef_compat/copied_from_chef'
@@ -15,8 +15,8 @@ class Chef
 module ::ChefCompat
 module CopiedFromChef
 #
-# Author:: John Keiser <jkeiser@chef.io>
-# Copyright:: Copyright 2015-2016, Chef Software Inc.
+# Author:: Thom May (<thom@chef.io>)
+# Copyright:: Copyright (c) 2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,17 +30,26 @@ module CopiedFromChef
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 class Chef < (defined?(::Chef) ? ::Chef : Object)
-  NOT_PASSED = Object.new
-  def NOT_PASSED.to_s
-    "NOT_PASSED"
-  end
+  class Provider < (defined?(::Chef::Provider) ? ::Chef::Provider : Object)
+    class Noop < (defined?(::Chef::Provider::Noop) ? ::Chef::Provider::Noop : Chef::Provider)
+      def load_current_resource; end
 
-  def NOT_PASSED.inspect
-    to_s
+      def respond_to_missing?(method_sym, include_private = false)
+        method_sym.to_s.start_with?("action_") || super
+      end
+
+      def method_missing(method_sym, *arguments, &block)
+        if method_sym.to_s =~ /^action_/
+          Chef::Log.debug("NoOp-ing for #{method_sym}")
+        else
+          super
+        end
+      end
+    end
   end
-  NOT_PASSED.freeze
 end
 end
 end
