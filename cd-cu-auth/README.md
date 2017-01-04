@@ -11,6 +11,7 @@ Configures Ubuntu 16 LTS OpsWorks EC2 instances with users and groups from Corne
 * Move the KMS-based secret encryption/decryption out of the [cd-cu-auth_helper.rb library](libraries/cd-cu-auth_helper.rb) into one of our main AWS Ruby repos.
 * Create spec tests for recipes.
 * Check if cd-cu-auth users mush have "IsUnixEnabled?" in Cornell AD.
+* Do something useful with connection logs. Do we need/want to configurate and expose detailed SFTP logs?
 
 ### Feedback from Cornell IdM for Review and Potential Action
 
