@@ -27,7 +27,7 @@ These AWS resources are required so that the OpsWorks configuration can provided
 
 ### High Availability Considerations
 
-This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down.
+This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down. However, you won't be able to seemlessly load balance among the instances using and ELB because stickiness is required and not possible with SSH traffic.
 
 ### On-System File Structure and Permissions
 
