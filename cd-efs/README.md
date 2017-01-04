@@ -8,6 +8,7 @@ Works in conjunction with [cd-cu-auth](../cd-cu-auth), which configures Ubuntu 1
 
 * Fix nagging issue with `cd-efs::efs` recipe where the recipe fails because the system doesn't recognize that AD groups (used in directory group assignment) are real. Work around this issue by running `cd-cu-auth::default` and then running `cd-efs::efs` separately.
 * Create spec tests for recipes.
+* Use simplified method for mounting EFS volumes: https://aws.amazon.com/about-aws/whats-new/2016/12/simplified-mounting-of-amazon-efs-file-systems/
 
 ## Configuration
 
