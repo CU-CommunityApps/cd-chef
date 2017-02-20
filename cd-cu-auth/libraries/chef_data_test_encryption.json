@@ -2,11 +2,11 @@
   "kms_key_arn" : "arn:aws:kms:us-east-1:225162606092:key/c4834e4e-8d53-40f9-aca8-c1596ffa110b",
   "duo_config" : {
     "integration_key" : "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "secret_key_unencrypted" : "SOME SECRET KEY",
+    "secret_key_decrypted" : "SOME SECRET KEY",
     "api_host" : "api.example.com"
   },
   "sssd_config" : {
-    "ldap_default_authtok_unencrypted" : "SECRET PASSWORD",
-    "krb5_server" : ["ad19.cornell.edu", "ad20.cornell.edu"],
+    "ldap_default_authtok_decrypted" : "SECRET PASSWORD",
+    "krb5_server" : ["ad19.cornell.edu", "ad20.cornell.edu"]
   }
 }

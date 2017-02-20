@@ -58,7 +58,7 @@ krb5_server = <%= @sssd_config['krb5_server'].join(", ") %>
 ldap_default_bind_dn = <%= @sssd_config['ldap_default_bind_dn'] %>
 
 ldap_default_authtok_type = password
-ldap_default_authtok = <%= @sssd_config['ldap_default_authtok_unencrypted'] %>
+ldap_default_authtok = <%= @sssd_config['ldap_default_authtok_decrypted'] %>
 
 ldap_force_upper_case_realm = true
 
