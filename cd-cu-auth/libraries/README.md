@@ -1,0 +1,1 @@
+This Ruby code and related test files should eventually be moved to [cucloud_ruby](https://github.com/CU-CloudCollab/cucloud_ruby) repo.

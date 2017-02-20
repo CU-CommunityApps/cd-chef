@@ -1,0 +1,46 @@
+{
+  "name": "krb5",
+  "description": "Installs and configures Kerberos V authentication",
+  "long_description": "krb5 Cookbook\n=============\n\n[![Cookbook Version](http://img.shields.io/cookbook/v/krb5.svg)](https://supermarket.getchef.com/cookbooks/krb5)\n[![Build Status](https://secure.travis-ci.org/atomic-penguin/cookbook-krb5.svg?branch=master)](http://travis-ci.org/atomic-penguin/cookbook-krb5)\n\n\nDescription\n-----------\n\nInstalls and configures Kerberos version 5 authentication modules\non RedHat and Debian family systems.\n\nRequirements\n------------\n\nRequires some PAM configuration script such as pam-auth-update on Debian\nfamily systems, or authconfig on Redhat family systems.  Best effort is\nmade to use one of these two tools based on detected platform.\n\nYou can override krb5['authconfig'] with an execute command, as a string.\nWhich should configure PAM to use Kerberos on other systems.\n\nYou really need to have time synchronized within 5 minutes of your domain\ncontrollers, or key distribution centers.  Therefore the recipe depends\non the Chef NTP cookbook.  If you have another method of keeping accurate\nclocks, change the metadata according to your needs.\n\nAttributes\n----------\n\nThis cookbook has changed the attribute format and is no longer compatible\nwith older versions. If you wish to use the older syntax, pin your version\nto `< 2.0` or switch to the new syntax.\n\nThe new format used for template variables consists of `krb5[file][section][key] = 'value'` where file is one of `krb5_conf`, `kadm5_acl`, or `kdc_conf`.\n\n## Client / Libs\n\n * `krb5['client']['packages']` - Packages and libraries needed for Kerberos v5 authentication, detected for Redhat/Debian family systems.\n * `krb5['client']['authconfig']` - Configuration script for PAM, detected for RedHat and Debian family systems.\n\n### Section: includedir\n\n * `krb5['krb5_conf']['includedir']` - Array of directories to include, in order.  Default is empty.\n\n### Section: logging\n\n * `krb5['krb5_conf']['logging']['default']` - Default log location.  Default, 'FILE:/var/log/krb5libs.log'\n\n### Section: libdefaults\n\n * `krb5['krb5_conf']['libdefaults']['default_realm']` - The default realm, defaults to OHAI's domain attribute.\n * `krb5['krb5_conf']['libdefaults']['dns_lookup_kdc']` - Set to true if you have SRV records for KDC discovery.  Default is true.\n * `krb5['krb5_conf']['libdefaults']['dns_lookup_realm']` - Set to true if you have TXT records for realm discovery.  Default is false.\n * `krb5['krb5_conf']['libdefaults']['forwardable']` - Set to true to make initial credentials forwardable.  Default is true.\n * `krb5['krb5_conf']['libdefaults']['renew_lifetime']` - Default renewable ticket lifetime.  Default is `24h`.\n * `krb5['krb5_conf']['libdefaults']['ticket_lifetime']` - Default ticket lifetime.  Default is `24h`.\n\n### Section: realms\n\n * `krb5['krb5_conf']['realms']['default_realm']` - The default realm, defaults to `krb5['krb5_conf']['libdefaults']['default_realm']`\n * `krb5['krb5_conf']['realms']['default_realm_kdcs']` - Array of Kerberos servers for default realm.  Default is empty.\n * `krb5['krb5_conf']['realms']['default_realm_admin_server']` - Address of Kerberos admin server.  Defaults to empty.\n * `krb5['krb5_conf']['realms']['realms']` - Array of all realms, including the default.  Defaults to OHAI's domain attribute.\n\n### Section: appdefaults\n\n * `krb5['krb5_conf']['appdefaults']['pam']['debug']` = Set to true to enable PAM/Kerberos debugging.  Defaults to false.\n * `krb5['krb5_conf']['appdefaults']['pam']['forwardable']` - Instruct PAM to create forwardable tickets.  Defaults to `krb5['krb5_conf']['libdefaults']['forwardable']`\n * `krb5['krb5_conf']['appdefaults']['pam']['renew_lifetime']` - Defaults to `krb5['krb5_conf']['libdefaults']['renew_lifetime']`\n * `krb5['krb5_conf']['appdefaults']['pam']['ticket_lifetime']` - Defaults to `krb5['krb5_conf']['libdefaults']['ticket_lifetime']`\n * `krb5['krb5_conf']['appdefaults']['pam']['krb4_convert']` - Set to true to use the Kerberos conversion daemon to get V4 tickets.  Default is false.\n\n## Kerberos Admin Server (kadmind)\n\n * `krb5['kadmin']['packages']` - Packages for Kerberos Admin Server, detected on Redhat/Debian family systems.\n * `krb5['master_password']` - Master password for Kerberos database.  Default is `password`. (Please, change this!)\n * `krb5['admin_principal']` - Principal to create for administration.  Default is `admin/admin`.\n * `krb5['admin_password']` - Password for admin principal.  Default is `password`. (Please, change this!)\n\n### Section: logging\n\n * `krb5['krb5_conf']['logging']['admin_server']` - Kerberos Admin Server log location.  Default, 'FILE:/var/log/kadmind.log'\n\n### kadm5.acl\n\n  * `krb5['kadm5_acl'][principal]` - Sets up ACLs for `principal`.  Default is `\"*/admin@#{node['krb5']['krb5_conf']['libdefaults']['default_realm'].upcase}\" => ['*']`\n\n## KDC and kdc.conf\n\n * `krb5['kdc']['packages']` - Packages needed for a KDC, detected for Redhat/Debian family systems.\n\n### Section: logging\n\n * `krb5['krb5_conf']['logging']['kdc']` - KDC log location.  Default, 'FILE:/var/log/krb5kdc.log'\n\n### Section: kdcdefaults\n\n * `krb5['kdc_conf']['kdcdefaults']['kdc_ports']` - Set KDC listen ports.  Default is `88`.\n\n### Section: realms\n\n * `krb5['kdc_conf']['realms'][realm]['acl_file']` - Location of kadmind ACL file for `realm`.  Defaults to `default_realm`.\n * `krb5['kdc_conf']['realms'][realm]['admin_keytab']` - Location of admin keytab file for `realm`.  Defaults to `default_realm`.\n\nUsage\n-----\n\nHere are two example roles to be used with this recipe.  The first, is\na single realm configuration, using the OHAI domain attribute for the realm.\n\n```\nname \"krb5_domain\"\ndescription \"Configures Kerberos 5 Authentication for domain realm\"\noverride_attributes \"krb5\" => {\n   \"krb5_conf\" => {\n    \"realms\" => {\n      \"default_realm_kdcs\" => [\n        \"kdc1.example.com\",\n        \"kdc2.example.com\",\n        \"kdc3.example.com\"\n      ]\n    }\n  }\n}\nrun_list \"recipe[krb5]\"\n```\n\nThe second example is a role for multiple Kerberos realms.\n\n\n```\nname \"krb5_multirealm\"\ndescription \"Configures Kerberos 5 Authentication for example.com and example.org realm\"\noverride_attributes \"krb5\" => {\n  \"krb5_conf\" => {\n    \"libdefaults\" => {\n      \"default_realm\" => \"example.com\",\n      \"dns_lookup_kdc\" => \"true\"\n   },\n   \"realms\" => {\n      \"realms\" => [ \n        \"example.com\",\n        \"example.org\"\n      ],\n      \"default_realm_kdcs\" => [\n        \"kdc1.example.com\",\n        \"kdc2.example.com\",\n        \"kdc3.example.com\"\n      ],\n    }\n  } \n}\nrun_list \"recipe[krb5]\"\n```\n\nLicense and Authors\n-------------------\n\nAuthor:: Eric G. Wolfe\n\nAuthor:: Chris Gianelloni\n\nCopyright:: © 2012-2014 Eric G. Wolfe\n\nCopyright:: © 2014-2015 Cask Data, Inc.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License\n",
+  "maintainer": "Chris Gianelloni",
+  "maintainer_email": "wolf31o2@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "amazon": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "suse": ">= 0.0.0"
+  },
+  "dependencies": {
+    "build-essential": ">= 0.0.0",
+    "ntp": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "2.2.0"
+}

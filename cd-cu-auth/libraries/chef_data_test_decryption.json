@@ -1,0 +1,14 @@
+{
+  "duo_config": {
+    "integration_key" : "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "api_host" : "api.example.com",
+    "secret_key_encrypted": "AQECAHiTAEWO8pFB6IaTC2h+09d7dA2EcEIUW82T8I31+YU3RQAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxpsDSluFm/Vsb2EpYCARCAQ+W6qTyezBwn0ptlfWhOtXwTEnqe71vQomblZair3JiDA/MELYd84UgpBfwU6axKjUiNDknJAK1TgXCMhdKrF12eb5U="
+  },
+  "sssd_config": {
+    "krb5_server": [
+      "ad19.cornell.edu",
+      "ad20.cornell.edu"
+    ],
+    "ldap_default_authtok_encrypted": "AQECAHiTAEWO8pFB6IaTC2h+09d7dA2EcEIUW82T8I31+YU3RQAAAGYwZAYJKoZIhvcNAQcGoFcwVQIBADBQBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDOVp+RPdZTfE7pXXJgIBEIAjr69VIu8eZjd6DEL4yJ/AW5ajnLU6VgqQWhhsYIRUC2SEU0c="
+  }
+}

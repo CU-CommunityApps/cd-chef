@@ -1,0 +1,13 @@
+AllCops:
+  Exclude:
+    - vendor/bundle/**/*
+Encoding:
+  Enabled: False
+LineLength:
+  Max: 200
+HashSyntax:
+  Enabled: False
+SpaceBeforeFirstArg:
+  Enabled: false
+AsciiComments:
+  Enabled: false

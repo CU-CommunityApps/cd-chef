@@ -1,0 +1,39 @@
+# Contents of this configuration file are controlled by OpsWorks/Chef
+#
+
+# here are the per-package modules (the "Primary" block)
+# ORIGINAL W/O DUO
+#auth	[success=2 default=ignore]	pam_krb5.so minimum_uid=1000
+#auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
+
+# ORIGINAL W/SSSD
+# here are the per-package modules (the "Primary" block)
+# auth	[success=4 default=ignore]	pam_krb5.so minimum_uid=1000
+# auth	[success=3 default=ignore]	pam_unix.so nullok_secure try_first_pass
+# auth	[success=2 default=ignore]	pam_sss.so use_first_pass
+# auth	[success=1 default=ignore]	pam_ldap.so use_first_pass
+
+auth	[success=ok default=1]	pam_krb5.so minimum_uid=1000
+auth	[success=7 default=ignore]	/lib64/security/pam_duo.so
+auth	[success=ok default=1]	pam_unix.so nullok_secure try_first_pass
+auth	[success=5 default=ignore]	/lib64/security/pam_duo.so
+auth	[success=ok default=1]	pam_sss.so use_first_pass
+auth	[success=3 default=ignore]	/lib64/security/pam_duo.so
+auth	[success=ok default=1]	pam_ldap.so use_first_pass
+auth	[success=1 default=ignore]	/lib64/security/pam_duo.so
+
+# This duo config Works for just krb configured
+#auth	[success=ok default=1]	pam_krb5.so minimum_uid=1000
+#auth	[success=3 default=ignore]	/lib64/security/pam_duo.so
+#auth	[success=ok default=1]	pam_unix.so nullok_secure try_first_pass
+#auth	[success=1 default=ignore]	/lib64/security/pam_duo.so
+
+# here's the fallback if no module succeeds
+auth	requisite			pam_deny.so
+# prime the stack with a positive return value if there isn't one already;
+# this avoids us returning an error just because nothing sets a success code
+# since the modules above will each just jump around
+auth	required			pam_permit.so
+# and here are more per-package modules (the "Additional" block)
+auth	optional			pam_cap.so
+# end of pam-auth-update config
