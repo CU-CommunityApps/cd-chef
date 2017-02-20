@@ -8,6 +8,7 @@ Works in conjunction with [cd-cu-auth](../cd-cu-auth), which configures Ubuntu 1
 
 * Fix nagging issue with `cd-efs::efs` recipe where the recipe fails because the system doesn't recognize that AD groups (used in directory group assignment) are real. Work around this issue by running `cd-cu-auth::default` and then running `cd-efs::efs` separately.
 * Create spec tests for recipes.
+* Use simplified method for mounting EFS volumes: https://aws.amazon.com/about-aws/whats-new/2016/12/simplified-mounting-of-amazon-efs-file-systems/
 
 ## Configuration
 
@@ -27,7 +28,7 @@ These AWS resources are required so that the OpsWorks configuration can provided
 
 ### High Availability Considerations
 
-This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down.
+This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down. However, you won't be able to seemlessly load balance among the instances using and ELB because stickiness is required and not possible with SSH traffic.
 
 ### On-System File Structure and Permissions
 
