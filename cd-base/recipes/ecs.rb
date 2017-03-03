@@ -12,11 +12,11 @@ template 'ecs.config' do
     mode 0644
 end
 
-docker_container 'ecs-agent' do
-    remove_volumes true
-    action :delete
-    host 'unix:///var/run/docker.sock'
-end
+# docker_container 'ecs-agent' do
+#     remove_volumes true
+#     action :delete
+#     host 'unix:///var/run/docker.sock'
+# end
 
 execute "Install the Amazon ECS agent" do
   command ["/usr/bin/docker",
