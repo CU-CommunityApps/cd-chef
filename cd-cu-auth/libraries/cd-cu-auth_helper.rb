@@ -21,7 +21,7 @@ module OpsWorksKMSSecrets
   def OpsWorksKMSSecrets.decrypt_attributes(region, node, top_level_key)
     Cucloud.region = region
     kms_utils = Cucloud::KmsUtils.new
-    result = kms_utils.encrypt_struct(node[top_level_key])
+    result = kms_utils.decrypt_struct(node[top_level_key])
     node.default[top_level_key] = result
   end
 
