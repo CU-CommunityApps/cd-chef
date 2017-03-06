@@ -15,7 +15,7 @@ Configures Ubuntu 16 LTS OpsWorks EC2 instances with users and groups from Corne
 ### Done-ish
 
 * Move the KMS-based secret encryption/decryption out of the [cd-cu-auth_helper.rb library](libraries/cd-cu-auth_helper.rb) into one of our main AWS Ruby repos.
-  * The KMS utilities now reside in https://github.com/paul-e-allen/cucloud_ruby/tree/pea1-kms-support and are waiting to be pulled into https://github.com/CU-CloudCollab/cucloud_ruby.
+  * The KMS utilities are now in https://github.com/CU-CloudCollab/cucloud_ruby.
 
 ### Feedback from Cornell IdM for Review and Potential Action
 
