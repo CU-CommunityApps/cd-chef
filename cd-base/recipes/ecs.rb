@@ -1,8 +1,8 @@
-#group 'docker' do
-#    action :modify
-#    members 'srb55'
-#    append true
-#end
+group 'docker' do
+    action :modify
+    members 'srb55'
+    append true
+end
 
 template 'ecs.config' do
     path '/etc/ecs/ecs.config'
@@ -23,7 +23,6 @@ docker_image 'amazon/amazon-ecs-agent' do
   notifies :redeploy, 'docker_container[ecs-agent]'
 end
 
-# nl85 added block to use docker-container instead of exec
 docker_container 'ecs-agent' do
   image 'amazon/amazon-ecs-agent'
   tag node['opsworks_ecs']['agent']['tag']
