@@ -179,7 +179,7 @@ is decrypted to:
   "myconfig" : {
     "key1" : "value1",
     "key2_encrypted" : "THE ENCRYPTED VALUE FOR 'value2' IN STRICT BASE64 ENCODING",
-    "key2_unencrypted" : "value2"
+    "key2_decrypted" : "value2"
   }
 }
 ```
