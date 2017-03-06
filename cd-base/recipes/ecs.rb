@@ -17,11 +17,11 @@ end
 #    action :delete
 #end
 
-docker_image 'amazon/amazon-ecs-agent' do
-  tag node['opsworks_ecs']['agent']['tag']
-  action :pull
-  notifies :redeploy, 'docker_container[ecs-agent]'
-end
+#docker_image 'amazon/amazon-ecs-agent' do
+#  tag node['opsworks_ecs']['agent']['tag']
+#  action :pull
+#  notifies :redeploy, 'docker_container[ecs-agent]'
+#end
 
 # nl85 added block to use docker-container instead of exec
 docker_container 'ecs-agent' do
