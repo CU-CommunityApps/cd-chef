@@ -12,24 +12,51 @@ template 'ecs.config' do
     mode 0644
 end
 
+#docker_container 'ecs-agent' do
+#    remove_volumes true
+#    action :delete
+#end
+
+docker_image 'amazon/amazon-ecs-agent' do
+  tag node['opsworks_ecs']['agent']['tag']
+  action :pull
+  notifies :redeploy, 'docker_container[ecs-agent]'
+end
+
+# nl85 added block to use docker-container instead of exec
 docker_container 'ecs-agent' do
-    remove_volumes true
-    action :delete
+  image 'amazon/amazon-ecs-agent'
+  tag node['opsworks_ecs']['agent']['tag']
+  action :run_if_missing
+  detach true
+  port '127.0.0.1:51678:51678'
+  port '127.0.0.1:51678:51679'
+  restart_policy 'on-failure'
+  restart_maximum_retry_count 10
+  env lazy {
+    ::File.open('/etc/ecs/ecs.config').read.split("\n")
+  }
+  binds %w{
+    /var/run/docker.sock:/var/run/docker.sock
+    /var/log/ecs/:/log
+    /var/lib/ecs/data:/data
+    /sys/fs/cgroup:/sys/fs/cgroup:ro
+    /var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
+  }
 end
 
-execute "Install the Amazon ECS agent" do
-  command ["/usr/bin/docker",
-           "run",
-           "--name ecs-agent",
-           "-d",
-           "-v /var/run/docker.sock:/var/run/docker.sock",
-           "-v /var/log/ecs:/log",
-           "-v /var/lib/ecs/data:/data",
-           "-p 127.0.0.1:51678:51678",
-           "-p 127.0.0.1:51679:51679",
-           "--env-file /etc/ecs/ecs.config",
-           "amazon/amazon-ecs-agent:latest"].join(" ")
-
-  retries 1
-  retry_delay 5
-end
+#execute "Install the Amazon ECS agent" do
+#  command ["/usr/bin/docker",
+#           "run",
+#           "--name ecs-agent",
+#           "-d",
+#           "-v /var/log/ecs:/log",
+#           "-v /var/lib/ecs/data:/data",
+#           "-p 127.0.0.1:51678:51678",
+#           "-p 127.0.0.1:51679:51679",
+#           "--env-file /etc/ecs/ecs.config",
+#           "amazon/amazon-ecs-agent:latest"].join(" ")
+#
+#  retries 1
+#  retry_delay 5
+#end
