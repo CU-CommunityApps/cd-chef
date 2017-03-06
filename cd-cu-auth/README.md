@@ -8,10 +8,14 @@ Configures Ubuntu 16 LTS OpsWorks EC2 instances with users and groups from Corne
 
 * Change `sssd.conf` to use ad9.cornell.edu and ad10.cornell.edu for `krb5_server` property. These servers reside in an AWS VPC that must be peered to the VPC where these OpsWorks instances are deployed. For testing, we use the ad19.cornell.edu and ad20.cornell.edu servers, which reside in on-campus 10-space, instead.
 * Determine if non-root users on an OpsWorks/Chef instance can get access to the converged node attributes. Secrets are stored there.
-* Move the KMS-based secret encryption/decryption out of the [cd-cu-auth_helper.rb library](libraries/cd-cu-auth_helper.rb) into one of our main AWS Ruby repos.
 * Create spec tests for recipes.
 * Check if cd-cu-auth users mush have "IsUnixEnabled?" in Cornell AD.
 * Do something useful with connection logs. Do we need/want to configurate and expose detailed SFTP logs?
+
+### Done-ish
+
+* Move the KMS-based secret encryption/decryption out of the [cd-cu-auth_helper.rb library](libraries/cd-cu-auth_helper.rb) into one of our main AWS Ruby repos.
+  * The KMS utilities now reside in https://github.com/paul-e-allen/cucloud_ruby/tree/pea1-kms-support and are waiting to be pulled into https://github.com/CU-CloudCollab/cucloud_ruby.
 
 ### Feedback from Cornell IdM for Review and Potential Action
 
