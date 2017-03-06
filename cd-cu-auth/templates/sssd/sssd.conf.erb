@@ -106,11 +106,11 @@ ldap_tls_reqcert = allow
 #
 # Define the LDAP server to connect to. We use ldaps here to use SSL security.
 #
-# Will need to change to AD9, AD10
 # ldap_uri = ldaps://ad19.cornell.edu
-ldap_uri = <%= @sssd_config['ldap_uri'] %>
+ldap_uri = <%= @sssd_config['ldap_uri'].join(", ") %>
+
 # ldap_backup_uri = ldaps://ad20.cornell.edu
-ldap_backup_uri = <%= @sssd_config['ldap_backup_uri'] %>
+ldap_backup_uri = <%= @sssd_config['ldap_backup_uri'].join(", ") %>
 
 #
 # Define the attribute that contains the user's real, human name.
