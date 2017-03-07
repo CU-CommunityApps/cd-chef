@@ -43,7 +43,7 @@ docker_container 'ecs-agent' do
     /sys/fs/cgroup:/sys/fs/cgroup:ro
     /var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
   }
-#end
+end
 
 #execute "Install the Amazon ECS agent" do
 #  command ["/usr/bin/docker",
