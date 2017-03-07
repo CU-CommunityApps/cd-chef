@@ -18,14 +18,14 @@
 #end
 
 docker_image 'amazon/amazon-ecs-agent' do
-  tag node['opsworks_ecs']['agent']['tag']
+  tag 'latest'
   action :pull
   notifies :redeploy, 'docker_container[ecs-agent]'
 end
 
 docker_container 'ecs-agent' do
   image 'amazon/amazon-ecs-agent'
-  tag node['opsworks_ecs']['agent']['tag']
+  tag 'latest'
   action :run_if_missing
   detach true
   port '127.0.0.1:51678:51678'
