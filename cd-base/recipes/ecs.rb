@@ -4,24 +4,24 @@
 #    append true
 #end
 
-#template 'ecs.config' do
-#    path '/etc/ecs/ecs.config'
-#    source 'ecs.config.erb'
-#    owner 'root'
-#    group 'root'
-#    mode 0644
-#end
+template 'ecs.config' do
+    path '/etc/ecs/ecs.config'
+    source 'ecs.config.erb'
+    owner 'root'
+    group 'root'
+    mode 0644
+end
 
 #docker_container 'ecs-agent' do
 #    remove_volumes true
 #    action :delete
 #end
 
-docker_image 'amazon/amazon-ecs-agent' do
-  tag 'latest'
-  action :pull
-  notifies :redeploy, 'docker_container[ecs-agent]'
-end
+#docker_image 'amazon/amazon-ecs-agent' do
+#  tag 'latest'
+#  action :pull
+#  notifies :redeploy, 'docker_container[ecs-agent]'
+#end
 
 docker_container 'ecs-agent' do
   image 'amazon/amazon-ecs-agent'
