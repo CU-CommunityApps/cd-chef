@@ -20,7 +20,7 @@ end
 docker_image 'amazon/amazon-ecs-agent' do
   tag 'latest'
   action :pull
-  notifies :redeploy, 'docker_container[ecs-agent]'
+#  notifies :redeploy, 'docker_container[ecs-agent]'
 end
 
 #docker_container 'ecs-agent' do
