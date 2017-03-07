@@ -44,18 +44,18 @@ end
 #  }
 #end
 
-#execute "Install the Amazon ECS agent" do
-#  command ["/usr/bin/docker",
-#           "run",
-#           "--name ecs-agent",
-#           "-d",
-#           "-v /var/log/ecs:/log",
-#           "-v /var/lib/ecs/data:/data",
-#           "-p 127.0.0.1:51678:51678",
-#           "-p 127.0.0.1:51679:51679",
-#           "--env-file /etc/ecs/ecs.config",
-#           "amazon/amazon-ecs-agent:latest"].join(" ")
-#
-#  retries 1
-#  retry_delay 5
-#end
+execute "Install the Amazon ECS agent" do
+  command ["/usr/bin/docker",
+           "run",
+           "--name ecs-agent",
+           "-d",
+           "-v /var/log/ecs:/log",
+           "-v /var/lib/ecs/data:/data",
+           "-p 127.0.0.1:51678:51678",
+           "-p 127.0.0.1:51679:51679",
+           "--env-file /etc/ecs/ecs.config",
+           "amazon/amazon-ecs-agent:latest"].join(" ")
+
+  retries 1
+  retry_delay 5
+  end
