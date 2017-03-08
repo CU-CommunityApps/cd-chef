@@ -31,21 +31,12 @@ module DockerCookbook
         '/usr/bin/docker'
       end
 
-      def dockerd_bin
-        return '/usr/bin/docker' if Gem::Version.new(docker_major_version) < Gem::Version.new('1.12')
-        '/usr/bin/dockerd'
-      end
-
-      def dockerd_bin_link
-        "/usr/bin/dockerd-#{name}"
-      end
-
       def docker_name
         return 'docker' if name == 'default'
         "docker-#{name}"
       end
 
-      def installed_docker_version
+      def docker_version
         o = shell_out("#{docker_bin} --version")
         o.stdout.split[2].chomp(',')
       end
@@ -70,20 +61,6 @@ module DockerCookbook
         if sorted.first =~ %r{^tcp://0.0.0.0:}
           r = sorted.first.match(%r{(?<proto>.*)://(?<socket>[^:]+):?(?<port>\d+)?})
           return "tcp://127.0.0.1:#{r['port']}"
-        end
-        sorted.first
-      end
-
-      def connect_socket
-        return "/var/run/#{docker_name}.sock" unless host
-        sorted = coerce_host(host).sort do |a, b|
-          c_a = 1 if a =~ /^unix:/
-          c_a = 2 if a =~ /^fd:/
-          c_a = 3 unless c_a
-          c_b = 1 if b =~ /^unix:/
-          c_b = 2 if b =~ /^fd:/
-          c_b = 3 unless c_b
-          c_a <=> c_b
         end
         sorted.first
       end
@@ -113,33 +90,22 @@ module DockerCookbook
         end
       end
 
-      def coerce_insecure_registry(v)
-        case v
-        when Array, nil
-          v
-        else
-          Array(v)
-        end
-      end
-
       def docker_major_version
-        ray = installed_docker_version.split('.')
+        ray = docker_version.split('.')
         ray.pop
         ray.push.join('.')
       end
 
       def docker_daemon_arg
-        if Gem::Version.new(docker_major_version) < Gem::Version.new('1.8')
+        if Gem::Version.new(docker_major_version) < Gem::Version.new("1.8")
           '-d'
-        elsif Gem::Version.new(docker_major_version) < Gem::Version.new('1.12')
-          'daemon'
         else
-          ''
+          'daemon'
         end
       end
 
       def docker_daemon_cmd
-        [dockerd_bin, docker_daemon_arg, docker_daemon_opts].join(' ')
+        [docker_bin, docker_daemon_arg, docker_daemon_opts].join(' ')
       end
 
       def docker_cmd
@@ -156,12 +122,6 @@ module DockerCookbook
           opts << "--tlscert=#{tls_client_cert}" if tls_client_cert
           opts << "--tlskey=#{tls_client_key}" if tls_client_key
         end
-        opts
-      end
-
-      def systemd_args
-        opts = ''
-        systemd_opts.each { |systemd_opt| opts << "#{systemd_opt}\n" } if systemd_opts
         opts
       end
 
@@ -185,7 +145,7 @@ module DockerCookbook
         opts << "--graph=#{graph}" if graph
         host.each { |h| opts << "-H #{h}" } if host
         opts << "--icc=#{icc}" unless icc.nil?
-        insecure_registry.each { |i| opts << "--insecure-registry=#{i}" } if insecure_registry
+        opts << "--insecure-registry=#{insecure_registry}" if insecure_registry
         opts << "--ip=#{ip}" if ip
         opts << "--ip-forward=#{ip_forward}" unless ip_forward.nil?
         opts << "--ip-masq=#{ip_masq}" unless ip_masq.nil?
@@ -194,7 +154,7 @@ module DockerCookbook
         opts << "--log-level=#{log_level}" if log_level
         labels.each { |l| opts << "--label=#{l}" } if labels
         opts << "--log-driver=#{log_driver}" if log_driver
-        log_opts.each { |log_opt| opts << "--log-opt #{log_opt}" } if log_opts
+        log_opts.each { |log_opt| opts << "--log-opt=#{log_opt}" } if log_opts
         opts << "--mtu=#{mtu}" if mtu
         opts << "--pidfile=#{pidfile}" if pidfile
         opts << "--registry-mirror=#{registry_mirror}" if registry_mirror
@@ -208,8 +168,6 @@ module DockerCookbook
         opts << "--tlskey=#{tls_server_key}" if tls_server_key
         opts << "--userland-proxy=#{userland_proxy}" unless userland_proxy.nil?
         opts << "--disable-legacy-registry=#{disable_legacy_registry}" unless disable_legacy_registry.nil?
-        opts << "--userns-remap=#{userns_remap}" if userns_remap
-        opts << misc_opts if misc_opts
         opts
       end
 

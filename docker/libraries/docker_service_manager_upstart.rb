@@ -1,42 +1,29 @@
 module DockerCookbook
   class DockerServiceManagerUpstart < DockerServiceBase
-    resource_name :docker_service_manager_upstart
+    use_automatic_resource_name
 
     provides :docker_service_manager, platform: 'ubuntu'
     provides :docker_service_manager, platform: 'linuxmint'
 
     action :start do
-      create_docker_wait_ready
-
-      link dockerd_bin_link do
-        to dockerd_bin
-        link_type :hard
-        action :create
-      end
-
       template "/etc/init/#{docker_name}.conf" do
         source 'upstart/docker.conf.erb'
         owner 'root'
         group 'root'
         mode '0644'
         variables(
+          config: new_resource,
           docker_name: docker_name,
-          dockerd_bin_link: dockerd_bin_link,
-          docker_daemon_arg: docker_daemon_arg,
-          docker_wait_ready: "#{libexec_dir}/#{docker_name}-wait-ready"
+          docker_cmd: docker_cmd,
+          docker_daemon_cmd: docker_daemon_cmd
         )
         cookbook 'docker'
+        notifies :restart, new_resource unless ::File.exist? "/etc/#{docker_name}-firstconverge"
+        notifies :restart, new_resource if auto_restart
         action :create
       end
 
-      template "/etc/default/#{docker_name}" do
-        source 'default/docker.erb'
-        variables(
-          config: new_resource,
-          dockerd_bin_link: dockerd_bin_link,
-          docker_daemon_opts: docker_daemon_opts.join(' ')
-        )
-        cookbook 'docker'
+      file "/etc/#{docker_name}-firstconverge" do
         action :create
       end
 

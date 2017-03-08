@@ -1,7 +1,7 @@
 module DockerCookbook
-  class DockerBase < Chef::Resource
-    require_relative 'helpers_auth'
-    require_relative 'helpers_base'
+  class DockerBase < ChefCompat::Resource
+    require 'helpers_auth'
+    require 'helpers_base'
 
     include DockerHelpers::Base
 
@@ -70,10 +70,9 @@ module DockerCookbook
     # Resource properties
     #####################
 
-    property :api_retries, Integer, default: 3, desired_state: false
-    property :read_timeout, [Integer, nil], default: 60, desired_state: false
-    property :write_timeout, [Integer, nil], desired_state: false
-    property :running_wait_time, [Integer, nil], default: 20, desired_state: false
+    property :api_retries, Fixnum, default: 3, desired_state: false
+    property :read_timeout, [Fixnum, nil], default: 60, desired_state: false
+    property :write_timeout, [Fixnum, nil], desired_state: false
 
     property :tls, [Boolean, nil], default: lazy { default_tls }, desired_state: false
     property :tls_verify, [Boolean, nil], default: lazy { default_tls_verify }, desired_state: false
