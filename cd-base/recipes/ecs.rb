@@ -33,16 +33,9 @@ docker_container 'ecs-agent' do
   }
 end
 
-#  env lazy {
-#    ::File.open('/etc/ecs/ecs.config').read.split("\n")
-#  }
-#binds %w{
-#  /var/run/docker.sock:/var/run/docker.sock
-#  /var/log/ecs/:/log
-#  /var/lib/ecs/data:/data
-#  /sys/fs/cgroup:/sys/fs/cgroup:ro
-#  /var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
-
+#
+#  Old way using system command
+#
 #execute "Install the Amazon ECS agent" do
 #  command ["/usr/bin/docker",
 #           "run",
