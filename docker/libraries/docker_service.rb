@@ -1,32 +1,43 @@
 module DockerCookbook
-  require 'docker_service_base'
+  require_relative 'docker_service_base'
+
   class DockerService < DockerServiceBase
-    use_automatic_resource_name
+    resource_name :docker_service
 
     # register with the resource resolution system
     provides :docker_service
 
     # installation type and service_manager
-    property :install_method, %w(binary script package none auto), default: 'auto', desired_state: false
+    property :install_method, %w(binary script package tarball none auto), default: 'auto', desired_state: false
     property :service_manager, %w(execute sysvinit upstart systemd auto), default: 'auto', desired_state: false
-
-    # docker_installation_binary
-    property :checksum, String, desired_state: false
-    property :docker_bin, String, desired_state: false
-    property :source, String, desired_state: false
-    property :version, String, desired_state: false
 
     # docker_installation_script
     property :repo, desired_state: false
     property :script_url, String, desired_state: false
 
+    # docker_installation_binary and tarball
+    property :checksum, String, desired_state: false
+    property :docker_bin, String, desired_state: false
+    property :source, String, desired_state: false
+
     # docker_installation_package
     property :package_version, String, desired_state: false
+
+    # binary, package and tarball
     property :version, String, desired_state: false
+    property :package_options, [String, nil], desired_state: false
 
     ################
     # Helper Methods
     ################
+    def validate_install_method
+      if property_is_set?(:version) &&
+         install_method != 'binary' &&
+         install_method != 'package' &&
+         install_method != 'tarball'
+        raise Chef::Exceptions::ValidationFailed, 'Version property only supported for binary, package and tarball installation methods'
+      end
+    end
 
     def copy_properties_to(to, *properties)
       properties = self.class.properties.keys if properties.empty?
@@ -50,6 +61,8 @@ module DockerCookbook
           install = docker_installation_script(name, &block)
         when 'package'
           install = docker_installation_package(name, &block)
+        when 'tarball'
+          install = docker_installation_tarball(name, &block)
         when 'none'
           Chef::Log.info('Skipping Docker installation. Assuming it was handled previously.')
           return
@@ -81,9 +94,11 @@ module DockerCookbook
     #########
 
     action :create do
+      validate_install_method
+
       installation do
         action :create
-        notifies :restart, new_resource
+        notifies :restart, new_resource, :immediately
       end
     end
 
