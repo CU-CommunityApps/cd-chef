@@ -1,8 +1,8 @@
-#group 'docker' do
-#    action :modify
-#    members 'srb55'
-#    append true
-#end
+group 'docker' do
+    action :modify
+    members 'nl85'
+    append true
+end
 
 template 'ecs.config' do
     path '/etc/ecs/ecs.config'
