@@ -12,10 +12,10 @@ template 'ecs.config' do
     mode 0644
 end
 
-#docker_container 'ecs-agent' do
-#    remove_volumes true
-#    action :delete
-#end
+docker_container 'ecs-agent' do
+    remove_volumes true
+    action :delete
+end
 
 #docker_image 'amazon/amazon-ecs-agent' do
 #  tag 'latest'
@@ -34,6 +34,7 @@ docker_container 'ecs-agent' do
   restart_policy 'on-failure'
   restart_maximum_retry_count 10
   binds %w{
+    /var/run/docker.sock:/var/run/docker.sock
     /var/log/ecs/:/log
     /var/lib/ecs/data:/data
   }
