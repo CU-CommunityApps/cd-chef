@@ -26,7 +26,7 @@ end
 
 docker_container 'ecs-agent' do
   image 'amazon/amazon-ecs-agent'
-#  tag 'latest'
+  tag 'latest'
   action :run_if_missing
   detach true
   port '127.0.0.1:51678:51678'
