@@ -1,9 +1,3 @@
-group 'docker' do
-    action :modify
-    members 'srb55'
-    append true
-end
-
 template 'ecs.config' do
     path '/etc/ecs/ecs.config'
     source 'ecs.config.erb'
