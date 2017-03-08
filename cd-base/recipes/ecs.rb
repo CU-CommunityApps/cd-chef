@@ -33,15 +33,15 @@ docker_container 'ecs-agent' do
   port '127.0.0.1:51678:51679'
   restart_policy 'on-failure'
   restart_maximum_retry_count 10
-  env lazy {
-    ::File.open('/etc/ecs/ecs.config').read.split("\n")
-  }
   binds %w{
     /var/log/ecs/:/log
     /var/lib/ecs/data:/data
   }
 end
 
+#  env lazy {
+#    ::File.open('/etc/ecs/ecs.config').read.split("\n")
+#  }
 #binds %w{
 #  /var/run/docker.sock:/var/run/docker.sock
 #  /var/log/ecs/:/log
