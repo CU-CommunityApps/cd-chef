@@ -11,10 +11,10 @@ docker_container 'ecs-agent' do
     action :delete
 end
 
-#docker_image 'amazon/amazon-ecs-agent' do
-#  tag 'latest'
-#  action :pull
-#end
+docker_image 'amazon/amazon-ecs-agent' do
+  tag 'latest'
+  action :pull
+end
 #  notifies :redeploy, 'docker_container[ecs-agent]'
 #end
 
