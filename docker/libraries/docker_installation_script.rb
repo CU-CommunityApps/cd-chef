@@ -3,7 +3,7 @@ module DockerCookbook
     #####################
     # Resource properties
     #####################
-    resource_name :docker_installation_script
+    use_automatic_resource_name
 
     provides :docker_installation, os: 'linux'
 

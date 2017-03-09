@@ -1,9 +1,9 @@
 module DockerCookbook
   class DockerRegistry < DockerBase
     require 'docker'
-    require_relative 'helpers_auth'
+    require 'helpers_auth'
 
-    resource_name :docker_registry
+    use_automatic_resource_name
 
     property :email, [String, nil]
     property :password, [String, nil]
@@ -19,7 +19,7 @@ module DockerCookbook
         'serveraddress' => registry_host,
         'username' => username,
         'password' => password,
-        'email' => email,
+        'email' => email
       }
 
       begin
@@ -28,8 +28,11 @@ module DockerCookbook
           body: node.run_state['docker_auth'][registry_host].to_json
         )
       rescue Docker::Error::ServerError, Docker::Error::UnauthorizedError
-        raise Docker::Error::AuthenticationError, "#{username} failed to authenticate with #{serveraddress}" if (tries -= 1) == 0
-        retry
+        if (tries -= 1).zero?
+          raise Docker::Error::AuthenticationError, "#{username} failed to authenticate with #{serveraddress}"
+        else
+          retry
+        end
       end
 
       true

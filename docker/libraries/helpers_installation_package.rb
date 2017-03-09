@@ -11,13 +11,8 @@ module DockerCookbook
         false
       end
 
-      def fedora?
-        return true if node['platform'] == 'fedora'
-        false
-      end
-
-      def wheezy?
-        return true if node['platform'] == 'debian' && node['platform_version'].to_i == 7
+      def fc21?
+        return true if node['platform'] == 'fedora' && node['platform_version'] == '21'
         false
       end
 
@@ -47,54 +42,28 @@ module DockerCookbook
         false
       end
 
-      def xenial?
-        return true if node['platform'] == 'ubuntu' && node['platform_version'] == '16.04'
-        false
-      end
-
       def amazon?
         return true if node['platform'] == 'amazon'
-        false
       end
 
       # https://github.com/chef/chef/issues/4103
       def version_string(v)
-        ubuntu_prefix = if Gem::Version.new(v) > Gem::Version.new('1.12.3')
-                          'ubuntu-'
-                        else
-                          ''
-                        end
-
-        debian_prefix = if Gem::Version.new(v) > Gem::Version.new('1.12.3')
-                          'debian-'
-                        else
-                          ''
-                        end
-
         return "#{v}-1.el6" if el6?
         return "#{v}-1.el7.centos" if el7?
-        return "#{v}-1.17.amzn1" if amazon?
-        return "#{v}-1.fc#{node['platform_version'].to_i}" if fedora?
-        return "#{v}-0~#{debian_prefix}wheezy" if wheezy?
-        return "#{v}-0~#{debian_prefix}jessie" if jesse?
-        return "#{v}-0~#{ubuntu_prefix}precise" if precise?
-        return "#{v}-0~#{ubuntu_prefix}trusty" if trusty?
-        return "#{v}-0~#{ubuntu_prefix}vivid" if vivid?
-        return "#{v}-0~#{ubuntu_prefix}wily" if wily?
-        return "#{v}-0~#{ubuntu_prefix}xenial" if xenial?
+        return "#{v}-1.el6" if amazon?
+        return "#{v}-1.fc21" if fc21?
+        return "#{v}-0~jessie" if jesse?
+        return "#{v}-0~precise" if precise?
+        return "#{v}-0~trusty" if trusty?
+        return "#{v}-0~vivid" if vivid?
+        return "#{v}-0~wily" if wily?
         v
       end
 
       def default_docker_version
         return '1.7.1' if el6?
-        return '1.9.1' if vivid?
-        return '1.12.6' if amazon?
-        '1.13.1'
-      end
-
-      def default_package_name
-        return 'docker' if amazon?
-        'docker-engine'
+        return '1.7.1' if amazon?
+        '1.8.3'
       end
 
       def docker_bin
