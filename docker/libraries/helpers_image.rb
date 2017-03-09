@@ -10,7 +10,7 @@ module DockerCookbook
           source,
           {
             'nocache' => nocache,
-            'rm' => rm
+            'rm' => rm,
           },
           connection
         )
@@ -22,7 +22,7 @@ module DockerCookbook
           IO.read(source),
           {
             'nocache' => nocache,
-            'rm' => rm
+            'rm' => rm,
           },
           connection
         )
@@ -34,7 +34,7 @@ module DockerCookbook
           ::File.open(source, 'r'),
           {
             'nocache' => nocache,
-            'rm' => rm
+            'rm' => rm,
           },
           connection
         )
@@ -91,6 +91,12 @@ module DockerCookbook
       def save_image
         with_retries do
           Docker::Image.save(repo, destination, connection)
+        end
+      end
+
+      def load_image
+        with_retries do
+          Docker::Image.load(source, {}, connection)
         end
       end
     end
