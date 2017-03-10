@@ -57,29 +57,24 @@ module DockerCookbook
         end
       end
 
-      def default_network_mode
-        case api_version
-        when '1.19'
-          'bridge'
-        when proc { |n| n.to_f < 1.19 }
-          ''
-        else
-          'default'
-        end
-      end
-
       def state
-        container ? container.info['State'] : {}
+        # Always return the latest state, see #510
+        return Docker::Container.get(container_name, {}, connection).info['State']
+      rescue
+        return {}
       end
 
       def wait_running_state(v)
-        i = 0
-        tries = 20
-        until state['Running'] == v || state['FinishedAt'] != '0001-01-01T00:00:00Z'
-          i += 1
-          break if i == tries
+        tries = running_wait_time
+        tries.times do
+          return if state['Running'] == v
           sleep 1
         end
+        return if state['Running'] == v
+
+        # Container failed to reach correct state: Throw an error
+        desired_state_str = v ? 'running' : 'not running'
+        raise Docker::Error::TimeoutError, "Container #{container_name} failed to change to #{desired_state_str} state after #{tries} seconds"
       end
 
       def port(v = nil)
@@ -119,7 +114,7 @@ module DockerCookbook
           {
             'host_ip' => host_ip,
             'host_port' => host_port,
-            'container_port' => "#{port}/#{protocol}"
+            'container_port' => "#{port}/#{protocol}",
           }
         end
       end
@@ -148,7 +143,7 @@ module DockerCookbook
             h[y['container_port']] = [] unless h[y['container_port']]
             h[y['container_port']] << {
               'HostIp' => y['host_ip'],
-              'HostPort' => y['host_port']
+              'HostPort' => y['host_port'],
             }
           end
         end
@@ -169,8 +164,8 @@ module DockerCookbook
         def_logcfg
       end
 
-      # TODO: test image property in serverspec and kitchen
-      # TODO: test this logic with rspec
+      # TODO: test image property in serverspec and kitchen, not only in rspec
+      # for full specs of image parsing, see spec/helpers_container_spec.rb
       #
       # If you say:    `repo 'blah'`
       # Image will be: `blah:latest`
@@ -186,21 +181,40 @@ module DockerCookbook
       # Repo will be:  `blah`
       # Tag will be:   `3.1`
       #
+      # If you say:    `image 'repo/blah'`
+      # Repo will be:  `repo/blah`
+      # Tag will be:   `latest`
+      #
+      # If you say:    `image 'repo/blah:3.1'`
+      # Repo will be:  `repo/blah`
+      # Tag will be:   `3.1`
+      #
+      # If you say:    `image 'repo:1337/blah'`
+      # Repo will be:  `repo:1337/blah`
+      # Tag will be:   `latest'
+      #
+      # If you say:    `image 'repo:1337/blah:3.1'`
+      # Repo will be:  `repo:1337/blah`
+      # Tag will be:   `3.1`
+      #
       def image(image = nil)
         if image
-          r, t = image.split(':', 2)
+          if image.include?('/')
+            # pathological case, a ':' may be present which starts the 'port'
+            # part of the image name and not a tag. example: 'host:1337/blah'
+            # fortunately, tags are only found in the 'basename' part of image
+            # so we can split on '/' and rebuild once the tag has been parsed.
+            dirname, _, basename = image.rpartition('/')
+            r, t = basename.split(':', 2)
+            r = [dirname, r].join('/')
+          else
+            # normal case, the ':' starts the tag part
+            r, t = image.split(':', 2)
+          end
           repo r
           tag t if t
         end
         "#{repo}:#{tag}"
-      end
-
-      def to_snake_case(name)
-        # ExposedPorts -> _exposed_ports
-        name = name.gsub(/[A-Z]/) { |x| "_#{x.downcase}" }
-        # _exposed_ports -> exposed_ports
-        name = name[1..-1] if name.start_with?('_')
-        name
       end
 
       def to_shellwords(command)
