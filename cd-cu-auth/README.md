@@ -184,7 +184,7 @@ is decrypted to:
 }
 ```
 
-[cd-cu-auth_helper.rb](libraries/cd-cu-auth_helper.rb) also contains functions to encrypt values of keys with suffix "-unecrypted" in JSON files.
+See also [libraries/README.md](libraries/README.md).
 
 ## Notes
 
