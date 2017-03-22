@@ -2,14 +2,16 @@
 exec >> /var/log/efs-backup.log
 exec 2>&1
 
+BUCKET_NAME=cu-cs-efs-backup-test
+
 <%
 @filesystems.each do |group|
   group['mounts'].each do |efs|
-    src = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}"
-    efsid = "#{efs['efs_id']}"
+    src = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}/"
+    dest = "s3://$BUCKET_NAME/#{efs['efs_id']}/"
 %>
 # <%= src %>
-# s3cmd sync --verbose --dry-run <%= src %> s3://cu-cs-efs-backup-test/<%= efsid %>
+s3cmd sync --verbose --dry-run <%= src %> <%= dest%>
 <%
   end
 end

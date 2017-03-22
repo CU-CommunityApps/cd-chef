@@ -12,24 +12,10 @@ template '/root/efs-backup.sh' do
   action :create
 end
 
+#See existing jobs: cat /var/spool/cron/crontabs/root
 cron "backup-efs" do
   minute '*/5'
   home '/root'
   command "/root/efs-backup.sh"
 end
 
-node['filesystems'].each do |group|
-
-  group['mounts'].each do |efs|
-
-    cron "backup-#{efs['efs_id']}" do
-      action 'delete'
-      minute '*/5'
-      home '/'
-      command "/root/efs-backup.sh"
-    end
-    # "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}"
-
-  end
-
-end
