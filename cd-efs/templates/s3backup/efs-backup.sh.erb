@@ -9,6 +9,7 @@ exec 2>&1
     bucket_name = efs['backup_bucket_name']
     dest = "s3://#{bucket_name}/#{efs['efs_id']}/"
     logfile = src + 'efs-backup.log'
+    next if bucket_name.empty?
 %>
 # <%= src %> ==> <%= dest %>
 TMPFILE=`mktemp`
