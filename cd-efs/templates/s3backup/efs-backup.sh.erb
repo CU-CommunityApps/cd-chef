@@ -1,0 +1,12 @@
+#/bin/bash
+
+# This is a test
+
+<%
+@filesystems.each do |group|
+  group['mounts'].each do |efs| %>
+# <%= "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}" %>
+<%
+  end
+end
+%>
