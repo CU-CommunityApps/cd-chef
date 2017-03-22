@@ -14,7 +14,9 @@ end
 
 #See existing jobs: cat /var/spool/cron/crontabs/root
 cron "backup-efs" do
-  minute '*/5'
+  minute '0'
+  hour '4'
+  day '*'
   home '/root'
   command "/root/efs-backup.sh"
 end
