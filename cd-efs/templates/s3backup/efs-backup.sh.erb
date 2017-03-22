@@ -2,18 +2,18 @@
 exec >> /var/log/efs-backup.log
 exec 2>&1
 
-BUCKET_NAME=cu-cs-efs-backup-test
-
 <%
 @filesystems.each do |group|
   group['mounts'].each do |efs|
     src = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}/"
-    dest = "s3://$BUCKET_NAME/#{efs['efs_id']}/"
+    bucket_name = efs['backup_bucket_name']
+    dest = "s3://#{bucket_name}/#{efs['efs_id']}/"
     logfile = src + 'efs-backup.log'
 %>
-# <%= src %>
+# <%= src %> ==> <%= dest %>
 TMPFILE=`mktemp`
-s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> > $TMPFILE
+echo "BEGIN SYNC: `date`" > $TMPFILE
+s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> 2>&1 $TMPFILE
 cat $TMPFILE >> <%= logfile %>
 rm $TMPFILE
 s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
