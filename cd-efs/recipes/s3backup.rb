@@ -19,10 +19,7 @@ node['filesystems'].each do |group|
     cron "backup-#{efs['efs_id']}" do
       minute '*/5'
       home '/'
-      command %W{
-        ls -al /mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']} >> /var/log/efs-backup.log &&
-        date >> /var/log/efs-backup.log
-      }.join(' ')
+      command "/root/efs-backup.sh"
     end
     # "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}"
 

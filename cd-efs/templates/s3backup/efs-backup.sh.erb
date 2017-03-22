@@ -1,11 +1,15 @@
 #/bin/bash
-
-# This is a test
+exec >> /var/log/efs-backup.log
+exec 2>&1
 
 <%
 @filesystems.each do |group|
-  group['mounts'].each do |efs| %>
-# <%= "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}" %>
+  group['mounts'].each do |efs|
+    src = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}"
+    efsid = "#{efs['efs_id']}"
+%>
+# <%= src %>
+# s3cmd sync --verbose --dry-run <%= src %> s3://cu-cs-efs-backup-test/<%= efsid %>
 <%
   end
 end
