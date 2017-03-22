@@ -12,11 +12,18 @@ template '/root/efs-backup.sh' do
   action :create
 end
 
+cron "backup-efs" do
+  minute '*/5'
+  home '/root'
+  command "/root/efs-backup.sh"
+end
+
 node['filesystems'].each do |group|
 
   group['mounts'].each do |efs|
 
     cron "backup-#{efs['efs_id']}" do
+      action 'delete'
       minute '*/5'
       home '/'
       command "/root/efs-backup.sh"
