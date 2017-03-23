@@ -16,8 +16,7 @@ echo "BEGIN EFS BACKUP: `date`"
   next if bucket_name.empty?
 
   src = "#{backup['mount_path']}/"
-  prefix = backup['backup_s3bucket_prefix']
-  dest = "s3://#{bucket_name}/#{prefix}/#{backup['efs_id']}/"
+  dest = "s3://#{bucket_name}/#{backup['backup_s3bucket_prefix']}/#{backup['efs_id']}/"
   logfile = src + 'efs-backup.log'
 %>
 # <%= src %> ==> <%= dest %>
