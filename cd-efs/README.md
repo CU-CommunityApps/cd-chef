@@ -156,13 +156,17 @@ The `efs` recipe relies on OpsWorks custom JSON for configuration.
 
 ### s3backup Recipe
 
-The `s3backup` assumes that EFS file system is already mounted (by some other recipe, like `efs`). Its job is to setup a cron job that uses a script to accomplish EFS backups.
+The `s3backup` recipe assumes that EFS file system is already mounted (by some other recipe, like `efs`). Its job is to setup a cron job that uses a script to accomplish EFS backups.
 
 #### s3backup Recipe Custom JSON
 
 The custom JSON is separate from the custom JSON for the `efs` recipe. This is so that this recipe can be used without necessaryily having the EFS volumes mounted by the `efs` recipe.
 
-The sample below will backup the EFS volume mounted at `/mnt/ca-integrations/boomi-test` to `s3://cu-cloud-devops-boomi/efs-backups/fs-ab74bde2`
+The sample below will backup the EFS volume mounted at `/mnt/ca-integrations/boomi-test` to `s3://cu-cloud-devops-boomi/efs-backups/fs-ab74bde2`.
+
+A log of the backup is stored at `<mount_path>/efs-backup.log`, and backed-up to S3 in a separate step.
+
+A shorter cron log is created on the instance at `/var/log/efs-backup.log`.
 
 ```json
 {
