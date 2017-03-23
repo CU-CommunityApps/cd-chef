@@ -12,13 +12,13 @@ echo "BEGIN EFS BACKUP: `date`"
 # ]
 <%
 @filesystems.each do |backup|
-    bucket_name = backup['backup_s3bucket_name']
-    next if bucket_name.empty?
+  bucket_name = backup['backup_s3bucket_name']
+  next if bucket_name.empty?
 
-    src = "#{backup['mount_path']}/"
-    prefix = backup['backup_s3bucket_prefix']
-    dest = "s3://#{bucket_name}/#{prefix}/#{efs['efs_id']}/"
-    logfile = src + 'efs-backup.log'
+  src = "#{backup['mount_path']}/"
+  prefix = backup['backup_s3bucket_prefix']
+  dest = "s3://#{bucket_name}/#{prefix}/#{efs['efs_id']}/"
+  logfile = src + 'efs-backup.log'
 %>
 # <%= src %> ==> <%= dest %>
 TMPFILE=`mktemp`
@@ -30,7 +30,6 @@ rm $TMPFILE
 s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
 
 <%
-  end
 end
 %>
 echo "END EFS BACKUP: `date`"
