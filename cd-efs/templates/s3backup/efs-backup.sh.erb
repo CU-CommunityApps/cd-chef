@@ -1,20 +1,30 @@
 #/bin/bash
 exec >> /var/log/efs-backup.log
 exec 2>&1
-
+echo "BEGIN EFS BACKUP: `date`"
+# "efs_mounts": [
+#   {
+#     "mount_path": "/mnt/ca-integrations/boomi-test",
+#     "efs_id": "fs-ab74bde2",
+#     "backup_s3bucket_name": "cu-cloud-devops-boomi",
+#     "backup_s3bucket_prefix:": "efs-backups"
+#   }
+# ]
 <%
-@filesystems.each do |group|
-  group['mounts'].each do |efs|
-    src = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}/"
-    bucket_name = efs['backup_bucket_name']
-    dest = "s3://#{bucket_name}/#{efs['efs_id']}/"
-    logfile = src + 'efs-backup.log'
+@filesystems.each do |backup|
+    bucket_name = backup['backup_s3bucket_name']
     next if bucket_name.empty?
+
+    src = "#{backup['mount_path']}/"
+    prefix = backup['backup_s3bucket_prefix']
+    dest = "s3://#{bucket_name}/#{prefix}/#{efs['efs_id']}/"
+    logfile = src + 'efs-backup.log'
 %>
 # <%= src %> ==> <%= dest %>
 TMPFILE=`mktemp`
 echo "BEGIN SYNC: `date`" > $TMPFILE
 s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> >> $TMPFILE 2>&1
+echo "END SYNC: `date`" > $TMPFILE
 cat $TMPFILE >> <%= logfile %>
 rm $TMPFILE
 s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
@@ -23,3 +33,4 @@ s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
   end
 end
 %>
+echo "END EFS BACKUP: `date`"

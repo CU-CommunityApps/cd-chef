@@ -7,7 +7,7 @@ template '/root/efs-backup.sh' do
   group 'root'
   mode '0744'
   variables({
-    :filesystems => node['filesystems']
+    :filesystems => node['efs_mounts']
   })
   action :create
 end
