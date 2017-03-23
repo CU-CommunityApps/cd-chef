@@ -3,7 +3,7 @@ include_recipe "cd-cu-auth::secrets"
 # Add Duo repos to the list of standard Ubuntu repos
 apt_repository 'duo' do
   uri 'http://pkg.duosecurity.com/Ubuntu'
-  distribution 'trusty'
+  distribution 'xenial'
   components ['main']
   key 'https://duo.com/APT-GPG-KEY-DUO'
 end
