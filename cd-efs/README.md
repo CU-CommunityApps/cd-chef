@@ -4,9 +4,13 @@
 
 Works in conjunction with [cd-cu-auth](../cd-cu-auth), which configures Ubuntu 16 LTS OPsWorks EC2 instances with users and groups from Cornell AD. [cd-cu-auth](../cd-cu-auth) uses kerberos, sssd, and Duo for authentication and access control. This cookbook, [cd-efs](../cd-efs), mounts EFS volumes and configures them for access using directory group permissions.
 
+`cd-efs::s3backup` recipe configures a cron job to backup mounted EFS volumes to s3 using [s3cmd](http://s3tools.org/s3cmd). This tools is used instead of native AWS `s3` or `s3api` CLI interface since handles:
+- zero length files
+- maintains uid, guid, and other file metadata (e.g., create time)
+
 ## To Do
 
-* Fix nagging issue with `cd-efs::efs` recipe where the recipe fails because the system doesn't recognize that AD groups (used in directory group assignment) are real. Work around this issue by running `cd-cu-auth::default` and then running `cd-efs::efs` separately.
+* Fix nagging issue with `cd-efs::efs` recipe where the recipe fails because the system doesn't recognize that AD groups (used in directory group assignment) are real. Work around this issue by configuring `cd-cu-auth::default` as an OpsWorks Setup recipe and `cd-efs::efs` as an OpsWorks Configure recipe.
 * Create spec tests for recipes.
 * Use simplified method for mounting EFS volumes: https://aws.amazon.com/about-aws/whats-new/2016/12/simplified-mounting-of-amazon-efs-file-systems/
 
@@ -15,6 +19,7 @@ Works in conjunction with [cd-cu-auth](../cd-cu-auth), which configures Ubuntu 1
 ### "Static" AWS Resources
 
 These AWS resources are required so that the OpsWorks configuration can provided required functionality.
+
 
 * EC2 Security Groups
   * EFS mount target security group(s)
@@ -25,10 +30,44 @@ These AWS resources are required so that the OpsWorks configuration can provided
 * EFS Resources
   * EFS volumes to which access is to be provisioned
   * The OpsWorks layer/instances does not need EFS for its own use.
+* S3 Bucket(s)
+  * the instance profile is required to have access to an S3 bucket for backups
+  * Specific recommendations about bucket lifecycle policies and version will be forthcoming.
+* Instance Profile
+  * The instance profile used by the OpsWorks instances that wish to backup EFS to S3, must have a policy to allow that. E.g.
+  ```JSON
+  {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Sid": "Stmt1466096728000",
+              "Effect": "Allow",
+              "Action": [
+                  "s3:ListBucket"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::cu-cloud-devops-boomi"
+              ]
+          },
+          {
+              "Sid": "Stmt1466096728001",
+              "Effect": "Allow",
+              "Action": [
+                  "s3:*"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::cu-cloud-devops-boomi/*"
+              ]
+          }
+      ]
+  }
+  ```
 
 ### High Availability Considerations
 
-This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down. However, you won't be able to seemlessly load balance among the instances using and ELB because stickiness is required and not possible with SSH traffic.
+This OpsWorks stack provides user access to EFS volumes. The assumption is that those volumes have mount targets in both private subnets of a Cornell standard VPC. Therefore, for best availability, our configuration should run an EC2 instance in each of the private subnets. This provides availability in case one of the AZs is down. However, you won't be able to seamlessly load balance among the instances using and ELB because stickiness is required and not possible with SSH traffic.
+
+Also note that the `cd-efs::s3backup` recipe should not be configured for an OpsWorks layer that has more than one running instance. Otherwise, EFS volumes will be backed-up once for each instance.
 
 ### On-System File Structure and Permissions
 
@@ -115,5 +154,29 @@ The `efs` recipe relies on OpsWorks custom JSON for configuration.
 }
 ```
 
-## Notes
+### s3backup Recipe
+
+The `s3backup` assumes that EFS file system is already mounted (by some other recipe, like `efs`). Its job is to setup a cron job that uses a script to accomplish EFS backups.
+
+#### s3backup Recipe Custom JSON
+
+The custom JSON is separate from the custom JSON for the `efs` recipe. This is so that this recipe can be used without necessaryily having the EFS volumes mounted by the `efs` recipe.
+
+The sample below will backup the EFS volume mounted at `/mnt/ca-integrations/boomi-test` to `s3://cu-cloud-devops-boomi/efs-backups/fs-ab74bde2`
+
+```json
+{
+  "efs_mounts": [
+    {
+      "mount_path": "/mnt/ca-integrations/boomi-test",
+      "efs_id": "fs-ab74bde2",
+      "backup_s3bucket_name": "cu-cloud-devops-boomi",
+      "backup_s3bucket_prefix": "efs-backups",
+      "backup_dry_run": true,
+      "backup_verbose": true
+    }
+  ]
+}
+```
+
 
