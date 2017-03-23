@@ -14,7 +14,7 @@ exec 2>&1
 # <%= src %> ==> <%= dest %>
 TMPFILE=`mktemp`
 echo "BEGIN SYNC: `date`" > $TMPFILE
-s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> >> TMPFILE 2>&1 $
+s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> >> $TMPFILE 2>&1
 cat $TMPFILE >> <%= logfile %>
 rm $TMPFILE
 s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
