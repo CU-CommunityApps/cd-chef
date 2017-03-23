@@ -23,7 +23,7 @@ echo "BEGIN EFS BACKUP: `date`"
 TMPFILE=`mktemp`
 echo "BEGIN SYNC: `date`" > $TMPFILE
 s3cmd sync --dry-run --verbose --ssl --check-md5 --delete-removed --preserve <%= src %> <%= dest%> >> $TMPFILE 2>&1
-echo "END SYNC: `date`" > $TMPFILE
+echo "END SYNC: `date`" >> $TMPFILE
 cat $TMPFILE >> <%= logfile %>
 rm $TMPFILE
 s3cmd put --dry-run --verbose --ssl --preserve <%= logfile %> <%= dest%>
