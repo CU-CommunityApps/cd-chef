@@ -25,3 +25,6 @@
 [submodule "compat_resource"]
 	path = compat_resource
 	url = https://github.com/chef-cookbooks/compat_resource.git
+[submodule "aws"]
+	path = aws
+	url = https://github.com/chef-cookbooks/aws.git
