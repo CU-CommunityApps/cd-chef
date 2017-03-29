@@ -28,3 +28,6 @@
 [submodule "aws"]
 	path = aws
 	url = https://github.com/chef-cookbooks/aws.git
+[submodule "ohai"]
+	path = ohai
+	url = https://github.com/chef-cookbooks/ohai.git
