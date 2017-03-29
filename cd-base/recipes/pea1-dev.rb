@@ -42,7 +42,7 @@ aws_s3_file '/tmp/UnlimitedJCEPolicyJDK7.zip' do
 end
 
 execute 'unzip_security' do
-  command 'unzip /tmp/UnlimitedJCEPolicyJDK7.zip'
+  command 'unzip -o /tmp/UnlimitedJCEPolicyJDK7.zip'
   cwd '/tmp'
 end
 
