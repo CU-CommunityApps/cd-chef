@@ -22,3 +22,6 @@
 [submodule "yum"]
 	path = yum
 	url = https://github.com/chef-cookbooks/yum.git
+[submodule "compat_resource"]
+	path = compat_resource
+	url = https://github.com/chef-cookbooks/compat_resource.git
