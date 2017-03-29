@@ -7,3 +7,9 @@
 [submodule "chef_handler"]
 	path = chef_handler
 	url = https://github.com/chef-cookbooks/chef_handler.git
+[submodule "chef-os-hardening"]
+	path = chef-os-hardening
+	url = https://github.com/dev-sec/chef-os-hardening.git
+[submodule "chef-ssh-hardening"]
+	path = chef-ssh-hardening
+	url = https://github.com/dev-sec/chef-ssh-hardening.git
