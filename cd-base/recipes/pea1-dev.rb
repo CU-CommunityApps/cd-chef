@@ -25,12 +25,12 @@ aws_s3_file '/tmp/ofm_odsee_linux_11.1.1.7.0_64_disk1_1of1.zip' do
 end
 
 execute 'unzip_outer' do
-  command 'unzip /tmp/ofm_odsee_linux_11.1.1.7.0_64_disk1_1of1.zip'
+  command 'unzip -o /tmp/ofm_odsee_linux_11.1.1.7.0_64_disk1_1of1.zip'
   cwd '/tmp'
 end
 
 execute 'unzip_inner' do
-  command 'unzip /tmp/ODSEE_ZIP_Distribution/sun-dsee7.zip -d /app/ldap/ds-7/'
+  command 'unzip -o /tmp/ODSEE_ZIP_Distribution/sun-dsee7.zip -d /app/ldap/ds-7/'
 end
 
 aws_s3_file '/tmp/UnlimitedJCEPolicyJDK7.zip' do
