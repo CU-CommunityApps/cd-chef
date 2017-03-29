@@ -1,5 +1,5 @@
 chef_gem 'i18n' do
-  compile_time true
+  compile_time false
 end
 
 gem_package 'i18n'
