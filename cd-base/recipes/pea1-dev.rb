@@ -19,6 +19,5 @@ aws_s3_file '/tmp/ofm_idm_linux_11.1.1.7.0_64_disk1_1of1.zip' do
   region aws_region
   remote_path 'ofm_idm_linux_11.1.1.7.0_64_disk1_1of1.zip'
   use_etag  true
-  use_conditional_get true
   action :create_if_missing
 end
