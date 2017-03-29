@@ -19,3 +19,6 @@
 [submodule "sudo"]
 	path = sudo
 	url = https://github.com/chef-cookbooks/sudo.git
+[submodule "yum"]
+	path = yum
+	url = https://github.com/chef-cookbooks/yum.git
