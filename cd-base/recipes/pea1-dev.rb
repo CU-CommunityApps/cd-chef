@@ -54,7 +54,7 @@ end
 
 %w[ local_policy.jar US_export_policy.jar ].each do |target_file|
   remote_file target_file do
-    path '/app/ldap/ds-7/dsee/jre/lib/security/'+target_file
+    path '/app/ldap/ds-7/dsee7/jre/lib/security/'+target_file
     source 'file:///tmp/UnlimitedJCEPolicy/'+target_file
   end
 end
