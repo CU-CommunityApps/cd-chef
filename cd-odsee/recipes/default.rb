@@ -141,5 +141,5 @@ end
 
 template '/tmp/myscripts.conf' do
   source 'odsee/scripts.conf.erb'
-  variables server_name: 'aws' + node[:odsee][:environment] + 'ds' + node[:opsworks][:instance][:hostname]
+  variables({ server_name: 'aws' + node[:odsee][:environment] + 'ds' + node[:opsworks][:instance][:hostname]})
 end
