@@ -91,7 +91,7 @@ end
 # /app/ldap/ds-7/dsee7/bin/dsccreg add-agent /app/ldap/ds-7/dsee7/var/dcc/agent
 execute 'agent-register' do
   command '/app/ldap/ds-7/dsee7/bin/dsccreg add-agent -G /tmp/password.txt -w /tmp/password.txt'
-  not_if '/app/ldap/ds-7/dsee7/bin/dsccreg list-agents -w /tmp/password.txt | grep "0 agent(s) displayed"'
+  only_if '/app/ldap/ds-7/dsee7/bin/dsccreg list-agents -w /tmp/password.txt | grep "0 agent(s) displayed"'
 end
 
 execute 'agent-snmp' do
