@@ -139,11 +139,12 @@ execute 'unzip_scripts' do
   creates install_path+'/scripts'
 end
 
+instance = search("aws_opsworks_instance", "self:true").first
+
 template '/tmp/myscripts.conf' do
   source 'odsee/scripts.conf.erb'
   variables({
-    :server_name => 'aws'+node[:odsee][:environment]+'ds'+node["opsworks"]["instance"]["hostname"] })
-  variables({
-    :server_name => 'myserver'
+    :server_name => 'aws'+node[:odsee][:environment]+'ds'+instance['hostname'],
+    :ip => instance['private_ip']
   })
 end

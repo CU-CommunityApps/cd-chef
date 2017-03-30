@@ -26,7 +26,7 @@ DATA_PATH=<%= node[:odsee][:data_path] %>/<%= @server_name %>
 
 DSINSTANCE_NAME=slapd-<%= @server_name %>
 DS_NAME=<%= @server_name %>.directory.cornell.edu
-DS_IP=<%= node["opsworks"]["instance"]["ip"] %>
+DS_IP=<%= @ip %>
 DS_PORT=389
 DS_SSL_PORT=636
 DSCC_NAME=<%= @server_name %>.directory.cornell.edu
