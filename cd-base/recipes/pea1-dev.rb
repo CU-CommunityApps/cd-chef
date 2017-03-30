@@ -96,6 +96,7 @@ end
 
 execute 'agent-snmp' do
   command '/app/ldap/ds-7/dsee7/bin/dsccagent enable-snmp'
-nd
+end
+
 
 
