@@ -15,9 +15,11 @@ aws_region = stack['region']
 #   end
 # end
 
-install_dir = node[:odsee][:install_path]+node[:odsee][:install_dir]
+# /app/ldap/ds-7/dsee7
+install_path = node[:odsee][:install_path]
 
-directory node[:odsee][:install_path] do
+# create /app/ldap/ds-7
+directory node[:odsee][:install_path2] do
   owner 'root'
   group 'root'
   mode '0755'
@@ -41,7 +43,7 @@ end
 
 execute 'unzip_inner' do
   command 'unzip -o /tmp/ODSEE_ZIP_Distribution/sun-dsee7.zip -d /app/ldap/ds-7/'
-  creates install_dir
+  creates install_path
 end
 
 aws_s3_file '/tmp/UnlimitedJCEPolicyJDK7.zip' do
@@ -66,7 +68,7 @@ end
 
 %w[ local_policy.jar US_export_policy.jar ].each do |target_file|
   remote_file target_file do
-    path install_dir+'/jre/lib/security/'+target_file
+    path install_path+'/jre/lib/security/'+target_file
     source 'file:///tmp/UnlimitedJCEPolicy/'+target_file
   end
 end
@@ -94,34 +96,34 @@ end
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccsetup-1m.htm
 execute 'ads-create' do
   command 'bin/dsccsetup ads-create -w '+admin_password_file
-  only_if install_dir+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
-  cwd install_dir
+  only_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
+  cwd install_path
 end
 
 execute 'war-file-create' do
   command 'bin/dsccsetup war-file-create'
-  creates install_dir+'/var/dscc7.war'
-  cwd install_dir
+  creates install_path+'/var/dscc7.war'
+  cwd install_path
 end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
 execute 'agent-create' do
   command 'bin/dsccagent create -w '+agent_password_file
-  not_if install_dir+'/bin/dsccagent info'
-  cwd install_dir
+  not_if install_path+'/bin/dsccagent info'
+  cwd install_path
 end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccreg-1m.htm#dsccreg-1m
 # /app/ldap/ds-7/dsee7/bin/dsccreg add-agent /app/ldap/ds-7/dsee7/var/dcc/agent
 execute 'agent-register' do
   command 'bin/dsccreg add-agent -G '+agent_password_file+' -w '+admin_password_file
-  only_if install_dir+'/bin/dsccreg list-agents -w '+admin_password_file+' | grep "0 agent(s) displayed"'
-  cwd install_dir
+  only_if install_path+'/bin/dsccreg list-agents -w '+admin_password_file+' | grep "0 agent(s) displayed"'
+  cwd install_path
 end
 
 execute 'agent-snmp' do
   command 'bin/dsccagent enable-snmp'
-  cwd install_dir
+  cwd install_path
 end
 
 aws_s3_file '/tmp/scripts.zip' do
@@ -133,8 +135,8 @@ aws_s3_file '/tmp/scripts.zip' do
 end
 
 execute 'unzip_scripts' do
-  command "unzip -o /tmp/scripts.zip -d #{install_dir}/"
-  creates install_dir+'/scripts'
+  command "unzip -o /tmp/scripts.zip -d #{install_path}/"
+  creates install_path+'/scripts'
 end
 
 template '/tmp/myscripts.conf' do
