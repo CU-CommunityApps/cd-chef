@@ -59,4 +59,30 @@ end
   end
 end
 
+file '/tmp/password.txt' do
+  content "password123"
+end
 
+# improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status`
+# does not return something like:
+# ***
+# DSCC Registry has been created
+# Path of DSCC registry is /app/ldap/ds-7/dsee7/var/dcc/ads
+# Port of DSCC registry is 3998
+# ***
+# http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccsetup-1m.htm
+execute 'ads-create' do
+  command '/app/ldap/ds-7/dsee7/bin/dsccsetup ads-create -w /tmp/password.txt'
+  not_if '/app/ldap/ds-7/dsee7/bin/dsccsetup status | grep "DSCC Registry has been created"'
+end
+
+execute 'war-file-create' do
+  command '/app/ldap/ds-7/dsee7/bin/dsccsetup war-file-create'
+  creates '/app/ldap/ds-7/dsee7/var/dscc7.war'
+end
+
+# http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
+execute 'agent-create' do
+  command '/app/ldap/ds-7/dsee7/bin/dsccagent create -w /tmp/password.txt'
+  not_if '/app/ldap/ds-7/dsee7/bin/dsccagent info'
+end
