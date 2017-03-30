@@ -98,5 +98,18 @@ execute 'agent-snmp' do
   command '/app/ldap/ds-7/dsee7/bin/dsccagent enable-snmp'
 end
 
+aws_s3_file '/tmp/scripts.zip' do
+  bucket 'cu-cs-odsee'
+  region aws_region
+  remote_path 'scripts.zip'
+  use_etag  true
+  action :create_if_missing
+end
 
+execute 'unzip_scripts' do
+  command 'unzip /tmp/scripts.zip -d /app/ldap/ds-7/dsee7/'
+end
 
+template '/tmp/myscript.conf' do
+  source 'odsee/scripts.conf.erb'
+end
