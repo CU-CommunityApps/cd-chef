@@ -7,3 +7,5 @@ default[:odsee][:install_path]  = default[:odsee][:install_path2]+'/dsee7'
 
 default[:odsee][:log_path] = '/app/log/ldap/ds-7'
 default[:odsee][:data_path] = '/app/data/ldap/ds-7'
+
+default[:odsee][:environment] = 'dev'
