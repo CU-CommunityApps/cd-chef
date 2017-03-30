@@ -107,7 +107,8 @@ aws_s3_file '/tmp/scripts.zip' do
 end
 
 execute 'unzip_scripts' do
-  command 'unzip /tmp/scripts.zip -d /app/ldap/ds-7/dsee7/'
+  command 'unzip -o /tmp/scripts.zip -d /app/ldap/ds-7/dsee7/'
+  creates '/app/ldap/ds-7/dsee7/scripts'
 end
 
 template '/tmp/myscript.conf' do
