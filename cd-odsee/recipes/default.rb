@@ -155,7 +155,7 @@ end
 
 execute 'ldap-server' do
   command "bin/dsadm create -p 389 -P 636 -w #{dmadmin_password_file} #{install_path}/slapd-#{server_name}"
-  only_if "#{install_path}/bin/dsadm info #{install_path}/slapd-#{server_name}"
+  not_if "#{install_path}/bin/dsadm info #{install_path}/slapd-#{server_name}"
   cwd install_path
 end
 
