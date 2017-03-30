@@ -75,6 +75,7 @@ end
 
 admin_password_file = '/tmp/admin_password.txt'
 agent_password_file = '/tmp/agent_password.txt'
+dmadmin_password_file = '/tmp/dmadmin_password.txt'
 
 file admin_password_file do
   content "password123"
@@ -84,7 +85,9 @@ file agent_password_file do
   content "password123"
 end
 
-
+file dmadmin_password_file do
+  content "password123"
+end
 
 # improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status`
 # does not return something like:
@@ -140,11 +143,23 @@ execute 'unzip_scripts' do
 end
 
 instance = search("aws_opsworks_instance", "self:true").first
+server_name = 'aws'+node[:odsee][:environment]+'ds'+instance['hostname']
 
-template '/tmp/myscripts.conf' do
+template install_path+'/scripts/scripts.conf' do
   source 'odsee/scripts.conf.erb'
   variables({
-    :server_name => 'aws'+node[:odsee][:environment]+'ds'+instance['hostname'],
+    :server_name => server_name,
     :ip => instance['private_ip']
   })
+end
+
+execute 'ldap-server' do
+  command "bin/dsadm create -p 389 -P 636 -w #{dmadmin_password_file} #{install_path}/slapd-#{server_name}"
+  only_if "#{install_path}/bin/dsadm info #{install_path}/slapd-#{server_name}"
+  cwd install_path
+end
+
+execute 'ldap-start' do
+  command "bin/dsadm start #{install_path}/slapd-#{server_name}"
+  cwd install_path
 end
