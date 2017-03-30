@@ -31,3 +31,6 @@
 [submodule "ohai"]
 	path = ohai
 	url = https://github.com/chef-cookbooks/ohai.git
+[submodule "tomcat"]
+	path = tomcat
+	url = https://github.com/chef-cookbooks/tomcat.git
