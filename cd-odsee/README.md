@@ -13,6 +13,14 @@
 
 ## Configuration
 
+### Cloning the Repo
+
+```
+git clone https://github.com/CU-CommunityApps/cd-chef.git
+
+git submodule update --init --recursive
+```
+
 ### "Static" AWS Resources
 
 ## Recipes
