@@ -19,17 +19,17 @@ INSTALL_PATH2=<%= node[:odsee][:install_path2] %>
 INITIAL_DATA_PATH=<%= node[:odsee][:install_path2] %>/initial
 
 # DSLOG_PATH=/app/log/ldap/ds-7/awsdevds1
-DSLOG_PATH=<%= node[:odsee][:log_path] %>/<%= server_name %>
+DSLOG_PATH=<%= node[:odsee][:log_path] %>/<%= @server_name %>
 
 # DATA_PATH=/app/data/ldap/ds-7/awsdevds1
-DATA_PATH=<%= node[:odsee][:data_path] %>/<%= server_name %>
+DATA_PATH=<%= node[:odsee][:data_path] %>/<%= @server_name %>
 
-DSINSTANCE_NAME=slapd-<%= server_name %>
-DS_NAME=<%= server_name %>.directory.cornell.edu
+DSINSTANCE_NAME=slapd-<%= @server_name %>
+DS_NAME=<%= @server_name %>.directory.cornell.edu
 DS_IP=<%= node["opsworks"]["instance"]["ip"] %>
 DS_PORT=389
 DS_SSL_PORT=636
-DSCC_NAME=<%= server_name %>.directory.cornell.edu
+DSCC_NAME=<%= @server_name %>.directory.cornell.edu
 DSCC_PORT=8080
 DSCC_SSL_PORT=8081
 DSCC_ADMIN_PORT=8098
