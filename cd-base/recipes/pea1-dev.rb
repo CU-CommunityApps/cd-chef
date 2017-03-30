@@ -86,3 +86,16 @@ execute 'agent-create' do
   command '/app/ldap/ds-7/dsee7/bin/dsccagent create -w /tmp/password.txt'
   not_if '/app/ldap/ds-7/dsee7/bin/dsccagent info'
 end
+
+# http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccreg-1m.htm#dsccreg-1m
+# /app/ldap/ds-7/dsee7/bin/dsccreg add-agent /app/ldap/ds-7/dsee7/var/dcc/agent
+execute 'agent-register' do
+  command '/app/ldap/ds-7/dsee7/bin/dsccreg add-agent -G /tmp/password.txt -w /tmp/password.txt'
+  not_if '/app/ldap/ds-7/dsee7/bin/dsccreg list-agents -w /tmp/password.txt | grep "0 agent(s) displayed"'
+end
+
+execute 'agent-snmp' do
+  command '/app/ldap/ds-7/dsee7/bin/dsccagent enable-snmp'
+nd
+
+
