@@ -55,7 +55,7 @@ end
 execute 'unzip_security' do
   command 'unzip -o /tmp/UnlimitedJCEPolicyJDK7.zip'
   cwd '/tmp'
-  creates '/tmp/UnlimitedJCEPolicy/US_export_policy.jar'
+  creates '/tmp/UnlimitedJCEPolicy'
 end
 
 # cd /app/ldap/ds-7/dsee/jre/lib/security
@@ -71,9 +71,18 @@ end
   end
 end
 
-file '/tmp/password.txt' do
+admin_password_file = '/tmp/admin_password.txt'
+agent_password_file = '/tmp/agent_password.txt'
+
+file admin_password_file do
   content "password123"
 end
+
+file agent_password_file do
+  content "password123"
+end
+
+
 
 # improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status`
 # does not return something like:
@@ -84,31 +93,35 @@ end
 # ***
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccsetup-1m.htm
 execute 'ads-create' do
-  command 'bin/dsccsetup ads-create -w /tmp/password.txt'
-  only_if 'bin/dsccsetup status | grep "DSCC Registry has been created"'
+  command 'bin/dsccsetup ads-create -w '+admin_password_file
+  only_if install_dir+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
   cwd install_dir
 end
 
 execute 'war-file-create' do
-  command '/app/ldap/ds-7/dsee7/bin/dsccsetup war-file-create'
-  creates '/app/ldap/ds-7/dsee7/var/dscc7.war'
+  command 'bin/dsccsetup war-file-create'
+  creates install_dir+'/var/dscc7.war'
+  cwd install_dir
 end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
 execute 'agent-create' do
-  command '/app/ldap/ds-7/dsee7/bin/dsccagent create -w /tmp/password.txt'
-  not_if '/app/ldap/ds-7/dsee7/bin/dsccagent info'
+  command 'bin/dsccagent create -w '+agent_password_file
+  not_if install_dir+'/bin/dsccagent info'
+  cwd install_dir
 end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccreg-1m.htm#dsccreg-1m
 # /app/ldap/ds-7/dsee7/bin/dsccreg add-agent /app/ldap/ds-7/dsee7/var/dcc/agent
 execute 'agent-register' do
-  command '/app/ldap/ds-7/dsee7/bin/dsccreg add-agent -G /tmp/password.txt -w /tmp/password.txt'
-  only_if '/app/ldap/ds-7/dsee7/bin/dsccreg list-agents -w /tmp/password.txt | grep "0 agent(s) displayed"'
+  command 'bin/dsccreg add-agent -G '+agent_password_file+' -w '+admin_password_file
+  only_if install_dir+'/bin/dsccreg list-agents -w '+admin_password_file+' | grep "0 agent(s) displayed"'
+  cwd install_dir
 end
 
 execute 'agent-snmp' do
-  command '/app/ldap/ds-7/dsee7/bin/dsccagent enable-snmp'
+  command 'bin/dsccagent enable-snmp'
+  cwd install_dir
 end
 
 aws_s3_file '/tmp/scripts.zip' do
@@ -120,10 +133,10 @@ aws_s3_file '/tmp/scripts.zip' do
 end
 
 execute 'unzip_scripts' do
-  command 'unzip -o /tmp/scripts.zip -d /app/ldap/ds-7/dsee7/'
-  creates '/app/ldap/ds-7/dsee7/scripts'
+  command "unzip -o /tmp/scripts.zip -d #{install_dir}/"
+  creates install_dir+'/scripts'
 end
 
-template '/tmp/myscript.conf' do
+template '/tmp/myscripts.conf' do
   source 'odsee/scripts.conf.erb'
 end
