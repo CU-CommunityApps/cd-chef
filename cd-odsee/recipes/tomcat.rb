@@ -11,7 +11,7 @@
 
 tomcat_install 'test' do
   version '7.0.76'
-  install_path default['odsee']['install']['install_path2']+'/apache-tomcat-7.0'
+  install_path ndoe['odsee']['install']['install_path2']+'/apache-tomcat-7.0'
   exclude_docs true
   exclude_examples true
   exclude_manager true
