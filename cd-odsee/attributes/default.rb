@@ -4,7 +4,7 @@ default['odsee']['environment'] = 'dev'
 
 # These attribute names are aligned with IDM scripts.conf names
 default['odsee']['install']['app_dir'] = '/app/ldap'
-default['odsee']['install']['install_path2'] = ' /app/ldap/ds-7'
+default['odsee']['install']['install_path2'] = '/app/ldap/ds-7'
 default['odsee']['install']['install_path']  = '/app/ldap/ds-7/dsee7'
 default['odsee']['install']['log_path'] = '/app/log/ldap/ds-7'
 default['odsee']['install']['data_path'] = '/app/data/ldap/ds-7'
