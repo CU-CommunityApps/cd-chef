@@ -7,22 +7,22 @@ NEED_DPS_Reg=0
 NEED_DSCC=1
 
 # APP_DIR=/app/ldap
-APP_DIR=<%= node[:odsee][:app_dir] %>
+APP_DIR=<%= node['odsee']['install']['app_dir'] %>
 
 # INSTALL_PATH=/app/ldap/ds-7/dsee7
-INSTALL_PATH=<%= node[:odsee][:install_path] %>
+INSTALL_PATH=<%= node['odsee']['install']['install_path'] %>
 
 # INSTALL_PATH2=/app/ldap/ds-7
-INSTALL_PATH2=<%= node[:odsee][:install_path2] %>
+INSTALL_PATH2=<%= node['odsee']['install']['install_path2'] %>
 
 # INITIAL_DATA_PATH=/app/data/ldap/ds-7/initial
-INITIAL_DATA_PATH=<%= node[:odsee][:install_path2] %>/initial
+INITIAL_DATA_PATH=<%= node['odsee']['install']['install_path2'] %>/initial
 
 # DSLOG_PATH=/app/log/ldap/ds-7/awsdevds1
-DSLOG_PATH=<%= node[:odsee][:log_path] %>/<%= @server_name %>
+DSLOG_PATH=<%= node['odsee']['install']['log_path'] %>/<%= @server_name %>
 
 # DATA_PATH=/app/data/ldap/ds-7/awsdevds1
-DATA_PATH=<%= node[:odsee][:data_path] %>/<%= @server_name %>
+DATA_PATH=<%= node['odsee']['install']['data_path'] %>/<%= @server_name %>
 
 DSINSTANCE_NAME=slapd-<%= @server_name %>
 DS_NAME=<%= @server_name %>.directory.cornell.edu
@@ -39,4 +39,4 @@ GROUP=ldap
 SHARED=ds7
 
 #JAVA_HOME=/app/ldap/ds-7/dsee7/jre
-JAVA_HOME=<%= node[:odsee][:install_path] %>/jre
+JAVA_HOME=<%= node['odsee']['install']['install_path'] %>/jre
