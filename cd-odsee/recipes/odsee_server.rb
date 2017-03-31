@@ -107,7 +107,7 @@ dmadmin_password_file = node['odsee']['credentials']['dmadmin_password_file_name
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccsetup-1m.htm
 execute 'ads-create' do
   command 'bin/dsccsetup ads-create -w '+admin_password_file
-  only_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
+  not_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
   cwd install_path
 end
 
