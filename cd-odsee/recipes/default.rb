@@ -219,9 +219,48 @@ end
  end
 end
 
+# $ /app/ldap/ds-7/dsee7/bin/dsconf list-suffixes -c -w /tmp/admin_password.txt -v
+# SUFFIX_DN                    entry-count  repl-role       repl-agmts  repl-priorities  indexes  encr-attrs
+# ---------------------------  -----------  --------------  ----------  ---------------  -------  ----------
+# dc=authz,dc=cornell,dc=edu             1  not-replicated         N/A              N/A       29           0
+# dc=guests,dc=cornell,dc=edu            1  not-replicated         N/A              N/A       29           0
+# o=cornell university,c=us              1  not-replicated         N/A              N/A       29           0
+# o=“cornell                             1  not-replicated         N/A              N/A       29           0
+
+# $ /app/ldap/ds-7/dsee7/bin/dsconf list-suffixes -c -w /tmp/admin_password.txt -v -E
+# SUFFIX_DN                    PROP             VAL
+# ---------------------------  ---------------  --------------
+# dc=authz,dc=cornell,dc=edu   entry-count      1
+# dc=authz,dc=cornell,dc=edu   repl-role        not-replicated
+# dc=authz,dc=cornell,dc=edu   repl-agmts       N/A
+# dc=authz,dc=cornell,dc=edu   repl-priorities  N/A
+# dc=authz,dc=cornell,dc=edu   indexes          29
+# dc=authz,dc=cornell,dc=edu   encr-attrs       0
+# dc=guests,dc=cornell,dc=edu  entry-count      1
+# dc=guests,dc=cornell,dc=edu  repl-role        not-replicated
+# dc=guests,dc=cornell,dc=edu  repl-agmts       N/A
+# dc=guests,dc=cornell,dc=edu  repl-priorities  N/A
+# dc=guests,dc=cornell,dc=edu  indexes          29
+# dc=guests,dc=cornell,dc=edu  encr-attrs       0
+# o=cornell university,c=us    entry-count      1
+# o=cornell university,c=us    repl-role        not-replicated
+# o=cornell university,c=us    repl-agmts       N/A
+# o=cornell university,c=us    repl-priorities  N/A
+# o=cornell university,c=us    indexes          29
+# o=cornell university,c=us    encr-attrs       0
+# o=“cornell                   entry-count      1
+# o=“cornell                   repl-role        not-replicated
+# o=“cornell                   repl-agmts       N/A
+# o=“cornell                   repl-priorities  N/A
+# o=“cornell                   indexes          29
+# o=“cornell                   encr-attrs       0
+
+
 execute "data-import" do
   command "bin/dsconf import -p 389 -e #{data_file_target}.gz \"o=cornell university,c=us\""
   cwd install_path
 
 end
+
+
 
