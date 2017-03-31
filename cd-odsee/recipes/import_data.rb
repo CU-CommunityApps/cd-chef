@@ -66,7 +66,7 @@ if !data_file.nil? && !data_file.empty? then
 # o=“cornell                   encr-attrs       0
 
 
-  dmadmin_password_file = node['odsee']['credentials']['dmadmin_password_file_name']
+  admin_password_file = node['odsee']['credentials']['admin_password_file_name']
 
   execute "data-import" do
     command "bin/dsconf import --no-inter -p 389 -w #{admin_password_file} -e #{data_file_target} \"o=cornell university,c=us\""
