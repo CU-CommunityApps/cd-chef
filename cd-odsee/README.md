@@ -28,6 +28,18 @@ git submodule update --init --recursive
 
 ## Recipes
 
+* setup_credentials - setup passwords in files to use during install
+* odsee_server - install and configure the ODSEE server
+* import_data - import data into the server
+* cleanup - remove credentials files no longer needed
+* start_server - just start the ODSEE server (using make)
+* tomcat - install and configure tomcat
+* default
+  # include_recipe "cd-odsee::setup_credentials"
+  # include_recipe "cd-odsee::odsee_server"
+  # include_recipe "cd-odsee::import_data"
+  # include_recipe "cd-odsee::cleanup" -- COMMENTED OUT OF DEFAULT FOR NOW
+
 ### Default Recipe
 
 
