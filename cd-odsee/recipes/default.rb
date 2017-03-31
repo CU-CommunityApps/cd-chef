@@ -215,6 +215,7 @@ end
  execute suffix do
    command "bin/dsconf create-suffix -p 389 -c -w #{admin_password_file} #{suffix}"
    cwd install_path
+   not_if "#{install_path}/bin/dsconf list-suffixes -c -w #{admin_password_file} | grep '#{suffix}'"
  end
 end
 
