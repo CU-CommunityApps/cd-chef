@@ -9,11 +9,13 @@
 # exclude_hostmanager: Exclude ./webapps/host-manager from installation. Default: false.
 
 
-tomcat_install 'test' do
+tomcat_install 'odsee' do
   version '7.0.76'
   install_path node['odsee']['install']['install_path2']+'/apache-tomcat-7.0'
   exclude_docs true
   exclude_examples true
-  exclude_manager true
-  exclude_hostmanager true
+  exclude_manager false
+  exclude_hostmanager false
 end
+
+# The war created by odsee is in /app/ldap/ds-7/dsee7/lib/web/dscc7_tmpl.war
