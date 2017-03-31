@@ -194,17 +194,17 @@ aws_s3_file "#{data_file_target}.gz"  do
   region aws_region
   remote_path "#{data_file}.gz"
   use_etag  true
-  action :create_if_missing
+  action :create
   owner 'ldap'
   group 'ldap'
-  # not_if { ::File.exist?(data_file_target+'.gz') }
+  not_if { ::File.exist?(data_file_target) }
 end
 
-# execute 'unzip-data' do
-#   command "gunzip -f #{data_file}.gz"
-#   creates data_file_target
-#   cwd install_path+'/resources'
-# end
+execute 'unzip-data' do
+  command "gunzip -f #{data_file}.gz"
+  creates data_file_target
+  cwd install_path+'/resources'
+end
 
 
 ##################################################################
@@ -257,9 +257,8 @@ end
 
 
 execute "data-import" do
-  command "bin/dsconf import -p 389 -e #{data_file_target}.gz \"o=cornell university,c=us\""
+  command "bin/dsconf import --no-inter -p 389 -w #{admin_password_file} -e #{data_file_target} \"o=cornell university,c=us\""
   cwd install_path
-
 end
 
 
