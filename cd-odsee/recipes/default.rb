@@ -185,19 +185,24 @@ end
 ##################################################################
 # Import data
 ##################################################################
-aws_s3_file install_path+'/resources/slapd-ds1.cornell.2017_03_30_030916.ldif.gz' do
+
+data_file = 'slapd-ds1.cornell.2017_03_30_030916.ldif'
+data_file_target = "#{install_path}/resources/#{data_file}"
+
+aws_s3_file "#{data_file_target}.gz"  do
   bucket 'cu-cs-odsee'
   region aws_region
-  remote_path 'slapd-ds1.cornell.2017_03_30_030916.ldif.gz'
+  remote_path "#{data_file}.gz"
   use_etag  true
   action :create_if_missing
   owner 'ldap'
   group 'ldap'
+  not_if { ::File.exist?(data_file_target) }
 end
 
 execute 'unzip-data' do
-  command 'gunzip -f slapd-ds1.cornell.2017_03_17_030919.ldif.gz'
-  creates install_path+'/resources/slapd-ds1.cornell.2017_03_30_030916.ldif'
+  command "gunzip -f #{data_file}.gz"
+  creates data_file_target
   cwd install_path+'/resources'
 end
 
