@@ -206,3 +206,15 @@ execute 'unzip-data' do
   cwd install_path+'/resources'
 end
 
+
+##################################################################
+# Configure
+##################################################################
+
+%w[ o=“cornell university,c=us” dc=guests,dc=cornell,dc=edu dc=authz,dc=cornell,dc=edu ].each do |suffix|
+ execute suffix do
+   command "bin/dsconf create-suffix -p 389 -c -w #{admin_password_file} #{suffix}"
+   cwd install_path
+ end
+end
+
