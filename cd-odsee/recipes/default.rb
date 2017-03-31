@@ -197,14 +197,14 @@ aws_s3_file "#{data_file_target}.gz"  do
   action :create_if_missing
   owner 'ldap'
   group 'ldap'
-  not_if { ::File.exist?(data_file_target) }
+  # not_if { ::File.exist?(data_file_target+'.gz') }
 end
 
-execute 'unzip-data' do
-  command "gunzip -f #{data_file}.gz"
-  creates data_file_target
-  cwd install_path+'/resources'
-end
+# execute 'unzip-data' do
+#   command "gunzip -f #{data_file}.gz"
+#   creates data_file_target
+#   cwd install_path+'/resources'
+# end
 
 
 ##################################################################
@@ -217,5 +217,11 @@ end
    cwd install_path
    not_if "#{install_path}/bin/dsconf list-suffixes -c -w #{admin_password_file} | grep #{suffix}"
  end
+end
+
+execute "data-import" do
+  command "bin/dsconf import -p 389 -e #{data_file_target}.gz \"o=cornell university,c=us\""
+  cwd install_path
+
 end
 
