@@ -163,3 +163,41 @@ execute 'ldap-start' do
   command "bin/dsadm start #{install_path}/slapd-#{server_name}"
   cwd install_path
 end
+
+##################################################################
+# Make user, group
+##################################################################
+
+group 'ldap'
+
+user 'ldap' do
+  group 'ldap'
+  home '/home/ldap'
+  shell '/bin/nologin'
+end
+
+directory '/home/ldap' do
+  owner 'ldap'
+  group 'ldap'
+  mode '0700'
+end
+
+##################################################################
+# Import data
+##################################################################
+aws_s3_file install_path+'/resources/slapd-ds1.cornell.2017_03_30_030916.ldif.gz' do
+  bucket 'cu-cs-odsee'
+  region aws_region
+  remote_path 'slapd-ds1.cornell.2017_03_30_030916.ldif.gz'
+  use_etag  true
+  action :create_if_missing
+  owner 'ldap'
+  group 'ldap'
+end
+
+execute 'unzip-data' do
+  command 'gunzip -f slapd-ds1.cornell.2017_03_17_030919.ldif.gz'
+  creates install_path+'/resources/slapd-ds1.cornell.2017_03_30_030916.ldif'
+  cwd install_path+'/resources'
+end
+
