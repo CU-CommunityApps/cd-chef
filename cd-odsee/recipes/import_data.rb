@@ -13,7 +13,7 @@ if !data_file.nil? && !data_file.empty? then
   aws_s3_file "#{data_file_target}.gz"  do
     bucket node['odsee']['import']['s3bucket']
     region aws_region
-    remote_path "#{default['odsee']['import']['s3_key_prefix']}#{data_file}.gz"
+    remote_path "#{node['odsee']['import']['s3_key_prefix']}#{data_file}.gz"
     use_etag  true
     action :create
     owner 'ldap'
