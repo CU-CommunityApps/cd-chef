@@ -98,17 +98,19 @@ admin_password_file = node['odsee']['credentials']['admin_password_file_name']
 agent_password_file = node['odsee']['credentials']['agent_password_file_name']
 dmadmin_password_file = node['odsee']['credentials']['dmadmin_password_file_name']
 
-# improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status`
-# does not return something like:
+# Once could potentially improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status` does not return something like:
 # ***
 # DSCC Registry has been created
 # Path of DSCC registry is /app/ldap/ds-7/dsee7/var/dcc/ads
 # Port of DSCC registry is 3998
 # ***
+# However, running this more than once is no big deal because the command
+# just says that an instance has already been created.
+
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccsetup-1m.htm
 execute 'ads-create' do
   command 'bin/dsccsetup ads-create -w '+admin_password_file
-  not_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
+  # not_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
   cwd install_path
 end
 
@@ -183,4 +185,18 @@ end
    cwd install_path
    not_if "#{install_path}/bin/dsconf list-suffixes -c -w #{admin_password_file} | grep #{suffix}"
  end
+end
+
+##################################################################
+# Setup DNS
+##################################################################
+route53_record "route53-config" do
+  name  "test-odsee"
+  value instance['public_ip']
+  type  "A"
+
+  zone_id node[:route53][:zone_id]
+  overwrite true
+  fail_on_error true
+  action :create
 end
