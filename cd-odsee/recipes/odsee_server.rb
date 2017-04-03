@@ -191,7 +191,7 @@ end
 # Setup DNS
 ##################################################################
 route53_record "route53-config" do
-  name  "test-odsee"
+  name  server_name
   value instance['public_ip']
   type  "A"
 
