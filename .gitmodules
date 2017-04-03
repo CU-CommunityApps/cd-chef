@@ -34,3 +34,6 @@
 [submodule "tomcat"]
 	path = tomcat
 	url = https://github.com/chef-cookbooks/tomcat.git
+[submodule "route53"]
+	path = route53
+	url = https://github.com/chef-cookbooks/route53.git
