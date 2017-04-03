@@ -100,10 +100,11 @@ Install and configure ODSEE for Cornell IDM. New instances are bootstrapped by i
 
 ### OpsWorks Layer Custom JSON
 
-```
+```JSON
 {
 	"route53": {
-		"zone_id": "Z1K86BI6YYEXQK"
+		"zone_id": "Z1K86BI6YYEXQK",
+    "subdomain": "cs.cucloud.net"
 	}
 }
 ```
@@ -212,4 +213,10 @@ git submodule add https://github.com/chef-cookbooks/route53.git
 git commit -m "add Route53 cookbook as a submodule"
 ```
 
+## Running OpsWorks commands on an instance
+
+```
+sudo opsworks-agent-cli run_command update_custom_cookbooks
+sudo opsworks-agent-cli run_command execute_recipes recipe["cd-odsee"]
+```
 
