@@ -10,7 +10,7 @@ Install and configure ODSEE for Cornell IDM. New instances are bootstrapped by i
   * Note that some of the shell scripts in the scripts directory also interact with the Tomcat instance (i.e., stop, start). If we move tomcat to a separate instance, then those would have to be examined more closely.
 * Add default passwords to attributes/default.rb (e.g., "agent_password_decrypted").
 * Pull real passwords from (OpsWorks) encrypted custom JSON or pull from S3 file(s).
-* Add a recipe to configure a Route53 record for the host. This is in expectation that we will be doing _something_ with Route53 for the real case. (https://supermarket.chef.io/cookbooks/route53)
+* Seems possible that we will need a recipe (or two) to be run at the "Shutdown" stage in order to do cleanup (e.g. clean up Route53 records).
 
 * Work with Chris McLain to:
   * Work out DNS, CNAMES, etc. Hopefully use Route53 as much as possible for automated records. The ideal would be to use an ELB as part of the OpsWorks layer configuration. Then we wouldn't have to manage DNS records for hostnames individually and expect some other mechanism to hide (and utilize) the individual instances.
@@ -22,7 +22,7 @@ Install and configure ODSEE for Cornell IDM. New instances are bootstrapped by i
 
 ## Issues
 
-* As of 4/3/2017, the `ads-create` step in `odsee_server` never seems to work the first time around. However, the second time the recpipe is run, that step completes just fine. See below.
+* As of 4/3/2017, the `ads-create` step in `odsee_server` never seems to work the first time around. However, the second time the recipe is run, that step completes just fine. See below for the error on the first time around:
   ```
   ================================================================================
   Error executing action `run` on resource 'execute[ads-create]'
@@ -176,6 +176,7 @@ Resources required by the OpsWorks layer.
       }
       ```
 * Security Groups
+  * **WARNING** Be sure to configure real passwords (not checked into the repo) before opening up access to the public.
   * [odsee-security-group](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups:search=sg-7329a30c;vpcId=vpc-71070114;sort=groupId)
     * This is the group that will be used to provide real access controls to ODSEE configuration.
   * [AWS-OpsWorks-Default-Server](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups:search=sg-2e766348;sort=groupId)
