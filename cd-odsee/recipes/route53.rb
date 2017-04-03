@@ -4,7 +4,7 @@ server_name = 'aws'+node['odsee']['environment']+'ds'+instance['hostname']
 # Setup DNS
 ##################################################################
 route53_record "route53-config" do
-  name  server_name+'cs.cucloud.net'
+  name  server_name+'.cs.cucloud.net'
   value instance['public_ip']
   type  "A"
 
