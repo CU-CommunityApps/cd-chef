@@ -190,6 +190,8 @@ end
 ##################################################################
 # Setup DNS
 ##################################################################
+include_recipe "route53"
+
 route53_record "route53-config" do
   name  server_name+'.'+node['route53']['subdomain']
   value instance['public_ip']
@@ -201,4 +203,3 @@ route53_record "route53-config" do
   fail_on_error true
   action :create
 end
-
