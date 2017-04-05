@@ -66,6 +66,8 @@ end
 #             <param-name>enablePooling</param-name>
 #                     <param-value>false</param-value>
 #                 </init-param>
+# it doesn't look like there's anything specific to this install in that file.
+# could we just edit the file, save it, then copy it in when the script runs?
 
 # copy the war file
 execute 'copy_war_file' do
@@ -83,3 +85,8 @@ end
 execute 'start_tomcat' do
   command "#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/bin/startup.sh"
 end
+
+# could also start tomcat this way
+# tomcat_service 'odsee' do
+#  action :start
+# end
