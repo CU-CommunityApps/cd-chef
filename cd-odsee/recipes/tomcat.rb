@@ -40,22 +40,22 @@ end
 
 execute 'change_permissions' do
   command 'chgrp -R tomcat conf'
-  cwd '/opt/tomcat'
+  cwd '/opt/tomcat_odsee'
 end
 
 execute 'change_permissions2' do
   command 'chmod g+rwx conf'
-  cwd '/opt/tomcat'
+  cwd '/opt/tomcat_odsee'
 end
 
 execute 'change_permissions3' do
   command 'chmod g+r conf/*'
-  cwd '/opt/tomcat'
+  cwd '/opt/tomcat_odsee'
 end
 
 execute 'change_permissions4' do
   command 'chown -R tomcat logs/ temp/ webapps/ work/'
-  cwd '/opt/tomcat'
+  cwd '/opt/tomcat_odsee'
 end
 
 # file edit
