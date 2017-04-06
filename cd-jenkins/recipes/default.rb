@@ -6,7 +6,9 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-
+# 2017-04-06 : nl85 - adding attribute for EFS mount 
+#
+ 
 yum_package 'nfs-utils'
 
 user 'jenkins' do
