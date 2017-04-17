@@ -7,10 +7,6 @@ chef_gem 'cucloud' do
   compile_time true
 end
 
-chef_gem 'cucloud' do
-  compile_time false
-end
-
 stack = search('aws_opsworks_stack').first
 region = stack['region']
 
