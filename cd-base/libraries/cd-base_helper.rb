@@ -1,7 +1,7 @@
 require 'aws-sdk-core'
 require 'cucloud'
 
-module OpsWorksKMSSecretsJenkins
+module OpsWorksKMSSecretsCDBase
 
   # Purpose: Decrypt attribute values in the Chef node object.
   #
@@ -18,7 +18,7 @@ module OpsWorksKMSSecretsJenkins
   # region = stack['region']
   # main_nodetraverse_decrypt(region, node, 'duo_config')
   #
-  def OpsWorksKMSSecretsJenkins.decrypt_attributes(region, node, top_level_key)
+  def OpsWorksKMSSecretsCDBase.decrypt_attributes(region, node, top_level_key)
     Cucloud.region = region
     kms_utils = Cucloud::KmsUtils.new
     result = kms_utils.decrypt_struct(node[top_level_key])

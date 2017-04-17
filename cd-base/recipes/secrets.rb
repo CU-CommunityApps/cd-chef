@@ -10,10 +10,10 @@ end
 stack = search('aws_opsworks_stack').first
 region = stack['region']
 
-require_relative "../libraries/cd-jenkins_helper.rb"
+require_relative "../libraries/cd-base_helper.rb"
 
-OpsWorksKMSSecretsJenkins.decrypt_attributes(region, node, 'ecs')
+OpsWorksKMSSecretsCDBase.decrypt_attributes(region, node, 'ecs')
 
 log 'TEST KMS DECRYPTION' do
-  message "DECRYPTED DATA: [#{node['ecs']['test_decrypted']}]"
+  message "DECRYPTED DATA: [#{node['ecs']['auth']['data_decrypted']}]"
 end
