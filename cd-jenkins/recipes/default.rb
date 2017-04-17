@@ -32,7 +32,7 @@ end
 #command "mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-137fb25a.efs.us-east-1.amazonaws.com:/ /var/jenkins_home"
 
 execute "mount efs directory" do
-  command "mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-6ff24226.efs.us-east-1.amazonaws.com:/ /var/jenkins_home"
+  command "mount -t nfs4 -o nfsvers=4.1 #{node['efs_dns']}:/ /var/jenkins_home"
   retries 1
   retry_delay 5
   not_if "grep -qs '/var/jenkins_home' /proc/mounts"
