@@ -36,7 +36,7 @@ execute "mount efs directory" do
   retries 1
   retry_delay 5
   not_if "grep -qs '/var/jenkins_home' /proc/mounts"
-  notifies :run, 'directory[/var/jenkins_home]', :immediately
+  notifies :create, 'directory[/var/jenkins_home]', :immediately
 end
 
 service 'docker' do
