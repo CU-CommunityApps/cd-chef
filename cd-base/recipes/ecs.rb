@@ -1,3 +1,5 @@
+include_recipe 'cd-base::secrets'
+
 template 'ecs.config' do
     path '/etc/ecs/ecs.config'
     source 'ecs.config.erb'
