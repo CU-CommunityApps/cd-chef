@@ -5,6 +5,9 @@ This file is used to list changes made in each version of the cd-jenkins cookboo
 ## 0.1.0
 - [your_name] - Initial release of cd-jenkins
 
+## 0.2.0
+- Paul Allen - Parameterize EFS volume to mount
+
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
 
