@@ -3,7 +3,7 @@ ECS_LOGLEVEL=info
 ECS_DATADIR=/data
 ECS_CLUSTER=<%= node["ecs"]["ecs_cluster_name"] %>
 ECS_ENGINE_AUTH_TYPE=<%= node["ecs"]["auth"]["type"] %><%
-if node["ecs"]["auth"]["data_decrypted"].empty? then %>
+if node["ecs"]["auth"]["data_decrypted"].nil? then %>
 ECS_ENGINE_AUTH_DATA=<%= node["ecs"]["auth"]["data"] %><%
 else %>
 ECS_ENGINE_AUTH_DATA=<%= node["ecs"]["auth"]["data_decrypted"] %><%
