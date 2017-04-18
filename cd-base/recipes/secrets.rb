@@ -13,7 +13,3 @@ region = stack['region']
 require_relative "../libraries/cd-base_helper.rb"
 
 OpsWorksKMSSecretsCDBase.decrypt_attributes(region, node, 'ecs')
-
-log 'TEST KMS DECRYPTION' do
-  message "DECRYPTED DATA: [#{node['ecs']['auth']['data_decrypted']}]"
-end
