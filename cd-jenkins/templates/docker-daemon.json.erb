@@ -1,0 +1,5 @@
+{
+  "debug": <%= node['jenkins']['docker_daemon']['debug'] %>,
+  "tls": <%= node['jenkins']['docker_daemon']['tls'] %>,
+  "hosts": [<%= node['jenkins']['docker_daemon']['hosts'].collect {|x| "\"#{x}\""}.join(",") %>]
+}
