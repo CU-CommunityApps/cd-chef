@@ -4,7 +4,7 @@ instance = search("aws_opsworks_instance", "self:true").first
 #instance['hostname']
 
 execute 'rsyslog-hostname' do
-  command "sed -i 's/#### GLOBAL DIRECTIVES ####/#### GLOBAL DIRECTIVES ####\n$LocalHostName #{stack['name']}-#{instance['hostname']}/' /etc/rsyslog.conf"
+  command "sed -i s/'#### GLOBAL DIRECTIVES ####'/'#### GLOBAL DIRECTIVES ####\n$LocalHostName #{stack['name']}-#{instance['hostname']}'/ /etc/rsyslog.conf"
   not_if 'grep -q LocalHostName /etc/rsyslog.conf'
 end
 
