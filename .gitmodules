@@ -1,0 +1,39 @@
+[submodule "odsee"]
+	path = odsee
+	url = https://github.com/CU-CommunityApps/odsee.git
+[submodule "garcon"]
+	path = garcon
+	url = https://github.com/CU-CommunityApps/garcon.git
+[submodule "chef_handler"]
+	path = chef_handler
+	url = https://github.com/chef-cookbooks/chef_handler.git
+[submodule "chef-os-hardening"]
+	path = chef-os-hardening
+	url = https://github.com/dev-sec/chef-os-hardening.git
+[submodule "chef-ssh-hardening"]
+	path = chef-ssh-hardening
+	url = https://github.com/dev-sec/chef-ssh-hardening.git
+[submodule "yum-epel"]
+	path = yum-epel
+	url = https://github.com/chef-cookbooks/yum-epel.git
+[submodule "sudo"]
+	path = sudo
+	url = https://github.com/chef-cookbooks/sudo.git
+[submodule "yum"]
+	path = yum
+	url = https://github.com/chef-cookbooks/yum.git
+[submodule "compat_resource"]
+	path = compat_resource
+	url = https://github.com/chef-cookbooks/compat_resource.git
+[submodule "aws"]
+	path = aws
+	url = https://github.com/chef-cookbooks/aws.git
+[submodule "ohai"]
+	path = ohai
+	url = https://github.com/chef-cookbooks/ohai.git
+[submodule "tomcat"]
+	path = tomcat
+	url = https://github.com/chef-cookbooks/tomcat.git
+[submodule "route53"]
+	path = route53
+	url = https://github.com/chef-cookbooks/route53.git
