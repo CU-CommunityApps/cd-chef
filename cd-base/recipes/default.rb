@@ -59,11 +59,9 @@ stack = search("aws_opsworks_stack").first
 instance = search("aws_opsworks_instance", "self:true").first
 #instance['hostname']
 
-execute 'rsyslog-hostname' do
-  command "sed -i '/#### GLOBAL DIRECTIVES ####/a $LocalHostName #{stack['name']}-#{instance['hostname']}' /etc/rsyslog.conf"
-  not_if 'grep -q LocalHostName /etc/rsyslog.conf'
+execute 'set-hostname' do
+  command "hostname #{stack['name']}-#{instance['hostname']}"
 end
-
 
 template 'pt.conf' do
     path '/etc/rsyslog.d/pt.conf'
