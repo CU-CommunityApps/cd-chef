@@ -6,7 +6,7 @@ instance = search("aws_opsworks_instance", "self:true").first
 
 execute 'set-hostname' do
   command "hostname #{stack['name']}-#{instance['hostname']}"
-  not_if instance['hostname'].start_with?(stack['name'])
+  not_if node['hostname'].start_with?(stack['name'])
 end
 
 service 'rsyslog' do
