@@ -39,6 +39,10 @@ execute "mount efs directory" do
   notifies :create, 'directory[/var/jenkins_home]', :immediately
 end
 
+template '/etc/docker/daemon.json' do
+  source 'docker-daemon.json.erb'
+end
+
 service 'docker' do
   action :restart
 end
