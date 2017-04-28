@@ -17,6 +17,9 @@ OpsWorksKMSSecrets.decrypt_attributes(region, node, 'dmadmin_password')
 
 # After decryption, node['admin_password']['secret_key_decrypted'] will contain the decrypted value of node['admin_password']['secret_key_encrypted'].
 
+# =-=-=-=-=-
+# create tmp password files
+# =-=-=-=-=-
 # file '/tmp/admin_password.txt' do
 #   content node['admin_password']['secret_key_decrypted']
 #   mode '0755'
@@ -36,17 +39,4 @@ OpsWorksKMSSecrets.decrypt_attributes(region, node, 'dmadmin_password')
 #   mode '0755'
 #   owner 'root'
 #   group 'root'
-# end
-
-# cleanup
-# file '/tmp/admin_password.txt' do
-#   action :delete
-# end
-
-# file '/tmp/agent_password.txt' do
-#   action :delete
-# end
-
-# file '/tmp/dmadmin_password.txt' do
-#   action :delete
 # end
