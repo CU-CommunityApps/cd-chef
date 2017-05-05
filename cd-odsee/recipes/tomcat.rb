@@ -88,9 +88,9 @@ link '/app/ldap/ds-7/apache-tomcat'  do
 end
 
 # start tomcat
-execute 'start_tomcat' do
-  command "#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/bin/startup.sh"
-end
+# execute 'start_tomcat' do
+#   command "#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/bin/startup.sh"
+# end
 
 # could also start tomcat this way
 # tomcat_service 'odsee' do
