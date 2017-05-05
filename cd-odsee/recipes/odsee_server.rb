@@ -114,11 +114,24 @@ execute 'ads-create' do
   cwd install_path
 end
 
+#
+#
+# run ads-create twice, first time ignore errors, second time not
+#
+#
+
 execute 'war-file-create' do
   command 'bin/dsccsetup war-file-create'
   creates install_path+'/var/dscc7.war'
   cwd install_path
 end
+
+#
+#
+# copy war file to S3 so we can abstract war file and tomcat from odsee
+# war file copied to S3
+#
+#
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
 execute 'agent-create' do
@@ -203,3 +216,9 @@ route53_record "route53-config" do
   fail_on_error true
   action :create
 end
+
+#
+#
+# future - round-robin dns? cornell cname? 
+#
+#

@@ -1,3 +1,9 @@
+#
+#
+# perhaps run tomcat on EB with t2.micro or nano
+#
+#
+
 # create user, group, assign permissions
 
 group 'tomcat'

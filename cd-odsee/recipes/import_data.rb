@@ -2,6 +2,12 @@
 # Import data
 ##################################################################
 
+#
+#
+# work with Chris to export daily on-prem ldif from cork to aws S3 bucket
+#
+#
+
 data_file = node['odsee']['import']['data_file']
 data_file_target = "#{node['odsee']['install']['install_path']}/resources/#{data_file}"
 

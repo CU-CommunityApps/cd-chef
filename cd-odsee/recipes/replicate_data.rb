@@ -10,6 +10,13 @@
 
 %w[ o="cornell\ university,c=us" dc=guests,dc=cornell,dc=edu dc=authz,dc=cornell,dc=edu ].each do |suffix|
  execute suffix do
-   command "#{default['odsee']['install']['install_path']}/bin/dsconf create-repl-agmt -h #{default['odsee']['install']['install_path']}/slapd-awsdevds1 -p 389 #{suffix} devds1.directory.cornell.edu:389"
+   command "#{node['odsee']['install']['install_path']}/bin/dsconf create-repl-agmt -h #{node['odsee']['install']['install_path']}/slapd-awsdevds1 -p 389 #{suffix} devds1.directory.cornell.edu:389"
  end
 end
+
+#
+#
+# parameterize direcory name and slapd-awsdevds1 names
+# combine with import_data, pass in via json import vs replicate
+#
+#
