@@ -98,7 +98,7 @@ admin_password_file = node['odsee']['credentials']['admin_password_file_name']
 agent_password_file = node['odsee']['credentials']['agent_password_file_name']
 dmadmin_password_file = node['odsee']['credentials']['dmadmin_password_file_name']
 
-# Once could potentially improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status` does not return something like:
+# One could potentially improve this by running only if  `sudo /app/ldap/ds-7/dsee7/bin/dsccsetup status` does not return something like:
 # ***
 # DSCC Registry has been created
 # Path of DSCC registry is /app/ldap/ds-7/dsee7/var/dcc/ads
@@ -112,13 +112,17 @@ execute 'ads-create' do
   command 'bin/dsccsetup ads-create -w '+admin_password_file
   # not_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
   cwd install_path
+  ignore_failure true
 end
 
-#
-#
-# run ads-create twice, first time ignore errors, second time not
-#
-#
+######################
+# run ads-create again
+######################
+execute 'ads-create' do
+  command 'bin/dsccsetup ads-create -w '+admin_password_file
+# not_if install_path+'/bin/dsccsetup status | grep "DSCC Registry has been created"'
+  cwd install_path
+ end
 
 execute 'war-file-create' do
   command 'bin/dsccsetup war-file-create'
@@ -126,12 +130,16 @@ execute 'war-file-create' do
   cwd install_path
 end
 
-#
-#
-# copy war file to S3 so we can abstract war file and tomcat from odsee
-# war file copied to S3
-#
-#
+##########################
+# get the war file from S3
+##########################
+# aws_s3_file install_path+'/var/dscc7.war' do
+#   bucket node['odsee']['install']['s3bucket']
+#   region aws_region
+#   remote_path 'dscc7.war'
+#   use_etag  true
+#   action :create_if_missing
+# end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
 execute 'agent-create' do
@@ -219,6 +227,6 @@ end
 
 #
 #
-# future - round-robin dns? cornell cname? 
+# future - round-robin dns? cornell cname?
 #
 #

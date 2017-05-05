@@ -18,5 +18,29 @@ file node['odsee']['credentials']['dmadmin_password_file_name'] do
   content "password123"
 end
 
+###########################
+# create tmp password files
+###########################
+# file node['odsee']['credentials']['admin_password_file_name'] do
+#   content node['admin_password']['secret_key_decrypted']
+#   mode '0600'
+#   owner 'root'
+#   group 'root'
+# end
+
+# file node['odsee']['credentials']['agent_password_file_name'] do
+#   content node['agent_password']['secret_key_decrypted']
+#   mode '0600'
+#   owner 'root'
+#   group 'root'
+# end
+
+# file node['odsee']['credentials']['dmadmin_password_file_name'] do
+#   content node['dmadmin_password']['secret_key_decrypted']
+#   mode '0600'
+#   owner 'root'
+#   group 'root'
+# end
+
 # Certificates
 # TDB
