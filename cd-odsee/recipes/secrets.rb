@@ -9,7 +9,7 @@ end
 stack = search('aws_opsworks_stack').first
 region = stack['region']
 
-require_relative "../libraries/cd-cu-auth_helper.rb"
+require_relative "../libraries/cd-odsee_helper.rb"
 
 OpsWorksKMSSecrets.decrypt_attributes(region, node, 'admin_password')
 OpsWorksKMSSecrets.decrypt_attributes(region, node, 'agent_password')
