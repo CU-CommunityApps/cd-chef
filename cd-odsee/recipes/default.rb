@@ -1,7 +1,7 @@
 ###################
 # decrypt passwords
 ###################
-# include_recipe "cd-odsee::secrets.rb"
+include_recipe "cd-odsee::secrets.rb"
 
 ####################################################
 # setup credentials, either with test or real values
