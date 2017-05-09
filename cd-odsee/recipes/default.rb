@@ -20,11 +20,11 @@ include_recipe "cd-odsee::odsee_server"
 add_data_from_source = node['data']['source']
 
 if add_data_from_source = "import"
-  include_recipe "cd-odsee::import_data.rb"
+  include_recipe "cd-odsee::import_data"
 end
 
 if add_data_from_source = "replicate"
- include_recipe = "cd-odsee::replicate_data.rb"
+ include_recipe = "cd-odsee::replicate_data"
 end
 
 # for now default to importing the data from file
