@@ -16,7 +16,7 @@ include_recipe "cd-odsee::odsee_server"
 #########################################
 # determine where the data will come from
 #########################################
-read for data source from custom json
+# read for data source from custom json
 add_data_from_source = node['data']['source']
 
 if add_data_from_source = "import"
