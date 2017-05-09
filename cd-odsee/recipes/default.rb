@@ -16,19 +16,19 @@ include_recipe "cd-odsee::odsee_server"
 #########################################
 # determine where the data will come from
 #########################################
-# read for data source from custom json
-# add_data_from_source = node['odsee']['data']['source']
-#
-# if add_data_from_source = "import"
-#   include_recipe "cd-odsee::import_data.rb"
-# end
-#
-# if add_data_from_source = "replicate"
-#  include_recipe = "cd-odsee::replicate_data.rb"
-# end
+read for data source from custom json
+add_data_from_source = node['data']['source']
 
-#for now default to importing the data from file
-include_recipe "cd-odsee::import_data"
+if add_data_from_source = "import"
+  include_recipe "cd-odsee::import_data.rb"
+end
+
+if add_data_from_source = "replicate"
+ include_recipe = "cd-odsee::replicate_data.rb"
+end
+
+# for now default to importing the data from file
+# include_recipe "cd-odsee::import_data"
 
 ############################
 # initialize tomcat instance
