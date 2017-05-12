@@ -124,22 +124,15 @@ execute 'ads-create' do
   cwd install_path
  end
 
+#####################
+# create the war file
+#####################
+# if we're getting the war file from S3 there is no need to create it each time
 execute 'war-file-create' do
   command 'bin/dsccsetup war-file-create'
   creates install_path+'/var/dscc7.war'
   cwd install_path
 end
-
-##########################
-# get the war file from S3
-##########################
-# aws_s3_file install_path+'/var/dscc7.war' do
-#   bucket node['odsee']['install']['s3bucket']
-#   region aws_region
-#   remote_path 'dscc7.war'
-#   use_etag  true
-#   action :create_if_missing
-# end
 
 # http://docs.oracle.com/cd/E29127_01/doc.111170/e28967/dsccagent-1m.htm#dsccagent-1m
 execute 'agent-create' do

@@ -30,6 +30,11 @@ end
 # for now default to importing the data from file
 # include_recipe "cd-odsee::import_data"
 
+##############
+# install java
+##############
+include_recipe "java"
+
 ############################
 # initialize tomcat instance
 ############################

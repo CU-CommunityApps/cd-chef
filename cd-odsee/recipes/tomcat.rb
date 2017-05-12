@@ -75,10 +75,25 @@ end
 # it doesn't look like there's anything specific to this install in that file.
 # could we just edit the file, save it, then copy it in when the script runs?
 
+###################
 # copy the war file
+###################
+# this will copy from a local source
 execute 'copy_war_file' do
   command "cp #{node['odsee']['install']['install_path']}/var/dscc7.war #{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/webapps"
 end
+
+###########################
+# copy the war file from S3
+###########################
+# we can also get the war file from S3
+# aws_s3_file #{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/webapps/dscc7.war' do
+#   bucket node['odsee']['install']['s3bucket']
+#   region aws_region
+#   remote_path 'dscc7.war'
+#   use_etag  true
+#   not_if { File.exist?("#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/webapps/dscc7.war") }
+# end
 
 # make symlink
 # i may have the from/to backwards
@@ -88,9 +103,9 @@ link '/app/ldap/ds-7/apache-tomcat'  do
 end
 
 # start tomcat
-# execute 'start_tomcat' do
-#   command "#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/bin/startup.sh"
-# end
+execute 'start_tomcat' do
+ command "#{node['odsee']['install']['install_path2']}/apache-tomcat-7.0/bin/startup.sh"
+end
 
 # could also start tomcat this way
 # tomcat_service 'odsee' do
