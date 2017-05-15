@@ -8,13 +8,16 @@
 #
 # We can also do this fairly simply through the UI, if you think this is a better alternative.  When we set up replication, we can skip the ldif import since the replication will happen automatically.  (However, we may want to do it depending on how long it takes for the replication to take place.)
 
+instance = search("aws_opsworks_instance", "self:true").first
+server_name = 'aws'+node['odsee']['environment']+'ds'+instance['hostname']
+
 %w[ o="cornell\ university,c=us" dc=guests,dc=cornell,dc=edu dc=authz,dc=cornell,dc=edu ].each do |suffix|
  execute suffix do
-   command "#{node['odsee']['install']['install_path']}/bin/dsconf create-repl-agmt -h #{node['odsee']['install']['install_path']}/slapd-awsdevds1 -p 389 #{suffix} devds1.directory.cornell.edu:389"
+   command "#{node['odsee']['install']['install_path']}/bin/dsconf create-repl-agmt -h #{node['odsee']['install']['install_path']}/slapd-#{server_name} -p 389 #{suffix} #{node['odsee']['environment']}ds1.directory.cornell.edu:389"
  end
 end
 
-#
+# you can replicate against any of the directory servers in the same environment
 #
 # parameterize direcory name and slapd-awsdevds1 names
 # combine with import_data, pass in via json import vs replicate
