@@ -183,4 +183,42 @@ A shorter cron log is created on the instance at `/var/log/efs-backup.log`.
 }
 ```
 
+#### s3backup Recipe IAM Privileges
+
+The following policy could be attached to an efs-connect instance role to give the instance access to a target S3 bucket.
+
+```json
+ {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::cu-cloud-devops-boomi"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::cu-cloud-devops-boomi/*"
+            ]
+        }
+    ]
+}
+```
 
