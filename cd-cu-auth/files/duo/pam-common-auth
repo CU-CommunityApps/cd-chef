@@ -13,13 +13,20 @@
 # auth	[success=2 default=ignore]	pam_sss.so use_first_pass
 # auth	[success=1 default=ignore]	pam_ldap.so use_first_pass
 
+# auth	[success=ok default=1]	pam_krb5.so minimum_uid=1000
+# auth	[success=7 default=ignore]	/lib64/security/pam_duo.so
+# auth	[success=ok default=1]	pam_unix.so nullok_secure try_first_pass
+# auth	[success=5 default=ignore]	/lib64/security/pam_duo.so
+# auth	[success=ok default=1]	pam_sss.so use_first_pass
+# auth	[success=3 default=ignore]	/lib64/security/pam_duo.so
+# auth	[success=ok default=1]	pam_ldap.so use_first_pass
+# auth	[success=1 default=ignore]	/lib64/security/pam_duo.so
+
 auth	[success=ok default=1]	pam_krb5.so minimum_uid=1000
-auth	[success=7 default=ignore]	/lib64/security/pam_duo.so
-auth	[success=ok default=1]	pam_unix.so nullok_secure try_first_pass
 auth	[success=5 default=ignore]	/lib64/security/pam_duo.so
-auth	[success=ok default=1]	pam_sss.so use_first_pass
+auth	[success=ok default=1]	pam_unix.so nullok_secure try_first_pass
 auth	[success=3 default=ignore]	/lib64/security/pam_duo.so
-auth	[success=ok default=1]	pam_ldap.so use_first_pass
+auth	[success=ok default=1]	pam_sss.so use_first_pass
 auth	[success=1 default=ignore]	/lib64/security/pam_duo.so
 
 # This duo config Works for just krb configured
@@ -35,5 +42,5 @@ auth	requisite			pam_deny.so
 # since the modules above will each just jump around
 auth	required			pam_permit.so
 # and here are more per-package modules (the "Additional" block)
-auth	optional			pam_cap.so
+# auth	optional			pam_cap.so
 # end of pam-auth-update config
