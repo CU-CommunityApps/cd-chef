@@ -158,6 +158,17 @@ The `efs` recipe relies on OpsWorks custom JSON for configuration.
 
 The `s3backup` recipe assumes that EFS file system is already mounted (by some other recipe, like `efs`). Its job is to setup a cron job that uses a script to accomplish EFS backups.
 
+#### Example Backup Timings
+
+These examples (Case A, Case B) ran on the same EC2 t2.micro instance sequentially. CPU usage spiked to 15-20% occasionally during the backups (initial and later sync) but was generally 5-10% sustained. These backups did not max out any monitoring metric. It did not significantly draw down CPU credit balance.
+
+| Case | Initial Backup? | Time (minutes) | # Files Examined | Total File Bytes Transferred |
+| --- | --- | ---: | ---: | --- |
+| A | yes | 141 | 45,925 | 12.6 GB |
+| A | no  | 16  | 45,926 | 11.5 MB |
+| B | yes | 145 | 46,583 | 15.2 GB |
+| B | no  | 24  | 46,584 | 17.1 MB |
+
 #### s3backup Recipe Custom JSON
 
 The custom JSON is separate from the custom JSON for the `efs` recipe. This is so that this recipe can be used without necessaryily having the EFS volumes mounted by the `efs` recipe.
