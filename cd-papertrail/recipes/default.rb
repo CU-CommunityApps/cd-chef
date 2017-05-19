@@ -1,4 +1,4 @@
-include_recipe "remote_syslog2-cookbook::default"
+include_recipe "remote_syslog2::default"
 
 stack = search("aws_opsworks_stack").first
 #stack['name']

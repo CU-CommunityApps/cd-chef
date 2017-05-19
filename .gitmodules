@@ -37,6 +37,6 @@
 [submodule "route53"]
 	path = route53
 	url = https://github.com/chef-cookbooks/route53.git
-[submodule "remote_syslog2-cookbook"]
-	path = remote_syslog2-cookbook
-	url = https://github.com/trappar/remote_syslog2-cookbook
+[submodule "remote_syslog2"]
+	path = remote_syslog2
+	url = https://github.com/trappar/remote_syslog2-cookbook.git
