@@ -160,14 +160,14 @@ The `s3backup` recipe assumes that EFS file system is already mounted (by some o
 
 #### Example Backup Timings
 
-These examples (Case A, Case B) ran on the same EC2 t2.micro instance sequentially. CPU usage spiked to 15-20% occasionally during the backups (initial and later sync) but was generally 5-10% sustained. These backups did not max out any monitoring metric. It did not significantly draw down CPU credit balance.
+These examples (Case A, Case B) ran on the same EC2 t2.micro instance sequentially. CPU usage spiked to 15-20% occasionally during the backups (initial and later sync) but was generally 5-10% sustained. These backups did not max out any monitoring metric. It did not significantly draw down CPU credit balance. None of the EFS volume metrics maxed out or bottomed out during the initial backup or the later syncs.
 
-| Case | Initial Backup? | Time (minutes) | # Files Examined | Total File Bytes Transferred |
+| Case | Type | Time (minutes) | # Files Examined | Total File Bytes Transferred |
 | --- | --- | ---: | ---: | --- |
-| A | yes | 141 | 45,925 | 12.6 GB |
-| A | no  | 16  | 45,926 | 11.5 MB |
-| B | yes | 145 | 46,583 | 15.2 GB |
-| B | no  | 24  | 46,584 | 17.1 MB |
+| A | initial sync | 141 | 45,925 | 12.6 GB |
+| A | subsequent sync  | 16  | 45,926 | 11.5 MB |
+| B | initial sync | 145 | 46,583 | 15.2 GB |
+| B | subsequent sync  | 24  | 46,584 | 17.1 MB |
 
 #### s3backup Recipe Custom JSON
 
