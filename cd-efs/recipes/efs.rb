@@ -25,13 +25,16 @@ node['filesystems'].each do |group|
   group['mounts'].each do |efs|
 
     # Make mount dir
-    directory "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}" do
+    mount_target = "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}"
+    file_target = "#{mount_target}/this-is-#{efs['efs_id']}.txt"
+    directory mount_target do
       owner 'root'
       group node['sssd_config']['override_gid'].to_i
       mode '0770'
+      not_if { ::File.exist?(target_file) }
     end
 
-    mount "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}" do
+    mount mount_target do
       device  "#{zone}.#{efs['efs_id']}.efs.#{region}.amazonaws.com:/"
       fstype  'nfs4'
       options 'nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,bg'
@@ -40,7 +43,7 @@ node['filesystems'].each do |group|
       action  [:mount, :enable]
     end
 
-    file "/mnt/#{group['ad_group_dir_name']}/#{efs['mount_dir_name']}/this-is-#{efs['efs_id']}.txt" do
+    file target_file do
       content ""
       owner 'root'
       group 'root'
