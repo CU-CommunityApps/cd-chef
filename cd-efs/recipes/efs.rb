@@ -31,7 +31,7 @@ node['filesystems'].each do |group|
       owner 'root'
       group node['sssd_config']['override_gid'].to_i
       mode '0770'
-      not_if { ::File.exist?(target_file) }
+      not_if { ::File.exist?(file_target) }
     end
 
     mount mount_target do
