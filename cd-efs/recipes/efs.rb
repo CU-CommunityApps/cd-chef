@@ -43,7 +43,7 @@ node['filesystems'].each do |group|
       action  [:mount, :enable]
     end
 
-    file target_file do
+    file file_target do
       content ""
       owner 'root'
       group 'root'
