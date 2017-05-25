@@ -6,6 +6,13 @@
 
 include_recipe 'aws'
 
+# Requires OpsWorks Custom JSON like this:
+# {
+#   "instance-tags": [
+#    { "key": "Application", "value": "infrastructure" }
+#   ]
+# }
+
 # Rquires IAM policy something like this:
 
 # {
