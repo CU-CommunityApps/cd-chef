@@ -33,7 +33,7 @@ end
 ##############
 # install java
 ##############
-include_recipe "java"
+# include_recipe "java"
 
 ############################
 # initialize tomcat instance
