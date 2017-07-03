@@ -39,7 +39,7 @@ end
 # initialize tomcat instance
 ############################
 # possibly to be removed when EB tomcat in place
-# include_recipe "cd-odsee::tomcat"
+include_recipe "cd-odsee::tomcat"
 
 ###########################
 # clean up credential files
