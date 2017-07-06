@@ -221,3 +221,53 @@ sudo opsworks-agent-cli run_command update_custom_cookbooks
 sudo opsworks-agent-cli run_command execute_recipes recipe["cd-odsee"]
 ```
 
+# Notes
+
+Info about admin user: https://blogs.oracle.com/sduloutr/global-administrators-with-a-subset-of-admin-privileges
+
+```
+$ sudo bin/dsccsetup status
+***
+DSCC Registry has been created
+Path of DSCC registry is /app/ldap/ds-7/dsee7/var/dcc/ads
+Port of DSCC registry is 3998
+***
+
+$ sudo bin/dsccagent info
+Instance Path     :   /app/ldap/ds-7/dsee7/var/dcc/agent  
+Owner             :   root  
+JMX port          :   3997  
+SNMP port         :   3996  
+DS port           :   3995  
+State             :   Running  
+PID               :   7998  
+DSCC registry     :   -  
+SNMP v3           :   Disabled  
+Instance version  :   A-A00
+
+
+$ sudo netstat -pln
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1022/sshd           
+tcp6       0      0 :::22                   :::*                    LISTEN      1022/sshd           
+tcp6       0      0 127.0.0.1:3995          :::*                    LISTEN      7998/java           
+tcp6       0      0 :::636                  :::*                    LISTEN      7943/ns-slapd       
+tcp6       0      0 :::3998                 :::*                    LISTEN      5812/ns-slapd       
+tcp6       0      0 :::3999                 :::*                    LISTEN      5812/ns-slapd       
+tcp6       0      0 :::389                  :::*                    LISTEN      7943/ns-slapd       
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           543/dhclient        
+udp        0      0 0.0.0.0:18678           0.0.0.0:*                           543/dhclient        
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           497/chronyd         
+udp6       0      0 :::44005                :::*                                543/dhclient        
+udp6       0      0 ::1:323                 :::*                                497/chronyd         
+udp6       0      0 :::3996                 :::*                                7998/java           
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   PID/Program name     Path
+unix  2      [ ACC ]     SEQPACKET  LISTENING     11808    1/systemd            /run/udev/control
+unix  2      [ ACC ]     STREAM     LISTENING     13351    1/systemd            /var/run/dbus/system_bus_socket
+unix  2      [ ACC ]     STREAM     LISTENING     14663    513/NetworkManager   /var/run/NetworkManager/private-dhcp
+unix  2      [ ACC ]     STREAM     LISTENING     11452    1/systemd            /run/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     7676     1/systemd            /run/systemd/journal/stdout
+
+```
