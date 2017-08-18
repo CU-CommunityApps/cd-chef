@@ -27,11 +27,11 @@ package 'docker-engine' do
   action :install
 end
 
-group 'docker' do
-  action :modify
-  members 'srb55'
-  append true
-end
+#group 'docker' do
+#  action :modify
+#  members 'srb55'
+#  append true
+#end
 
 service 'docker' do
   action :start
