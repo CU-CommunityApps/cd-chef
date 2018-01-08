@@ -34,6 +34,7 @@ if node[:platform_family].include?("debian")
 
   dpkg_package 'ssm-agent' do
     source '/tmp/amazon-ssm-agent.deb'
+    ignore_failure true
   end
 
   file '/tmp/amazon-ssm-agent.deb' do
@@ -47,6 +48,7 @@ else
 
   rpm_package 'ssm-agent' do
     source '/tmp/amazon-ssm-agent.rpm'
+    ignore_failure true
   end
 
   file '/tmp/amazon-ssm-agent.rpm' do
