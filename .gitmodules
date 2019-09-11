@@ -1,9 +1,6 @@
 [submodule "odsee"]
 	path = odsee
 	url = https://github.com/CU-CommunityApps/odsee.git
-[submodule "garcon"]
-	path = garcon
-	url = https://github.com/CU-CommunityApps/garcon.git
 [submodule "chef_handler"]
 	path = chef_handler
 	url = https://github.com/chef-cookbooks/chef_handler.git
